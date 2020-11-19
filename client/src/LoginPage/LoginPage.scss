@@ -1,0 +1,33 @@
+.LoginPage {
+    min-height: 85vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.LoginPage #login-form{
+    display: flex;
+    flex-direction: column;
+}
+
+.LoginPage .MuiFormControl-root{
+    margin: 1em 0!important;
+}
+
+.LoginPage .other-login-options{
+    font-size: 1.4em;
+    padding: 8px;
+    letter-spacing: 0.1ch;
+    display: flex;
+    flex-direction: column;
+}
+
+.LoginPage .other-login-options a{
+    padding: 3px 0;
+    transition: all 0.3s ease-in-out;
+}
+
+.LoginPage .other-login-options a:hover{
+    color: #736EFE;
+}

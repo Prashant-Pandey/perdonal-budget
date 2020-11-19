@@ -1,0 +1,83 @@
+.HomePage {
+    display: flex;
+    flex-direction: column;
+}
+
+.HomePage section{
+    padding: 3em 1.6em;
+    display: flex;
+    flex-direction: column;
+    min-height: 37em;
+}
+
+.HomePage section >h1{
+    text-align: center;
+    color: #4D5791;
+    font-size: 2.6em;
+    max-width: 36ch;
+}
+
+.HomePage section >p{
+    text-align: justify;
+    font-size: 1.6em;
+    max-width: 70ch;
+}
+
+.homePageSection1{
+    background-color: #85C3E9;
+    background-image: url("../assets/aboutSection1.webp");
+    background-repeat: no-repeat;
+    background-position: right 10em center;
+    background-size: 450px;
+    align-items: flex-start;
+    justify-content: center;
+    padding-left: 20em !important;
+}
+
+.homePageSection2{
+    background-color: #F6FCFF;
+    background-image: url("../assets/aboutSection2.svg");
+    background-repeat: no-repeat;
+    background-position: left 10em center;
+    background-size: 450px;
+    align-items: flex-end;
+    justify-content: center;
+    padding-right: 20em !important;
+}
+
+@media(max-width:1400px) and (min-width: 1080px){
+    .homePageSection1{
+        background-position: right 20px center;
+        padding-left: 10em !important;
+    }
+    
+    .homePageSection2{
+        background-position: left 20px center;
+        padding-right: 10em !important;
+    }
+}
+
+@media(max-width: 1080px){
+    .homePageSection1{
+        background-position: top center;
+        background-size: 44em;
+        padding: 30em 10px 10px 10px !important;
+        justify-content: flex-end;
+        align-items: center;
+        min-height: 30em !important;
+    }
+
+    section h1, section p{
+        padding: 8px;
+        margin: 0;
+    }
+    
+    .homePageSection2{
+        background-position: top 16px center;
+        background-size: 35em;
+        padding: 25em 10px 10px 10px !important;
+        justify-content: flex-end;
+        align-items: center;
+        min-height: 30em !important;
+    }
+}
