@@ -8,7 +8,6 @@ async function createUser(userObject) {
   try {
     if ((await User.find({ email: userObject.email })).length > 0) {
       // user exists
-      console.log('exists');
       return errorHandler.clientBasedError('User with this email exists, please try to login or use forgot password');
     }
     const user = await User.create(userObject);

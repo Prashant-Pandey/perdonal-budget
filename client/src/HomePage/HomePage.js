@@ -12,9 +12,9 @@ export default class HomePage extends Component {
 	}
 
 	async componentDidMount() {
-		const res = (await axios.get("http://localhost:3000/budget")).data.data;
-		this.setState({ budgets: res });
-		this.forceUpdate();
+		// const res = (await axios.get("http://localhost:3000/budget")).data.data;
+		// this.setState({ budgets: res });
+		// this.forceUpdate();
 	}
 
 	render() {

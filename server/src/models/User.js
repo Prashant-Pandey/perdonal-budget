@@ -4,9 +4,9 @@ const mongoose = require('mongoose');
 // Define a schema
 const Schema = mongoose.Schema;
 
-const iUser = ({ firstName, lastName, email, password, countryCode, phone }) => {
+const iUser = ({ firstName, lastName, email, password, phone }) => {
   return {
-    firstName, lastName, email, password, countryCode, phone
+    firstName, lastName, email, password, phone
   };
 };
 
@@ -19,7 +19,6 @@ const UserSchema = new Schema({
     required: true
   },
   password: String,
-  countryCode: Number,
   phone: String
 });
 

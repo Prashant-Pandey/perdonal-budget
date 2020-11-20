@@ -11,53 +11,88 @@ export default class LoginPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			loginError: false,
-			loginSuccess: false
+			isEmailError: false,
+			isPasswordError: false,
+			loginSuccess: false,
+			emailError: '',
+			passwordError: ''
 		}
 		this.login = this.login.bind(this);
 	}
 
-	login(e) {
-		e.preventDefault();
-		// login attempt
-		const loginData = JSON.stringify({
+	setLoginError = (isError) => {
+		if (isError) {
+			this.setState({ isEmailError: true, emailError: "Please check your email" });
+			this.setState({ isPasswordError: true, passwordError: "Please validate your password" });
+		} else {
+			this.setState({ isEmailError: false, emailError: "" });
+			this.setState({ isPasswordError: false, passwordError: "" });
+		}
+	}
+
+	async login(e) {
+		const loginJSON = {
 			'email': e.target.email.value,
-			'password': e.target.password.value
-		});
-		Axios.post("http://localhost:3000/login", loginData, {
-			headers: {
-				"Content-Type": "application/json"
-			}
-		}).then((res) => {
-			this.setState({loginError: this.state.loginSuccess, loginSuccess: !this.state.loginSuccess});
+			'password': e.target.password.value,
+		};
+		console.log(loginJSON);
+		if (loginJSON.email == "" || !loginJSON.email || loginJSON.password == "" || !loginJSON.password) return this.setLoginError(true)
+		else this.setLoginError(false)
+
+		// login attempt
+		try {
+			const res = await Axios.post("http://localhost:3000/auth/login",
+				JSON.stringify(loginJSON), {
+				headers: {
+					"Content-Type": "application/json"
+				}
+			});
+
 			console.log(res);
-		}).catch((e) => {
-			console.log(e);
 
-		});
+			if (res.data.err) {
+				return this.setLoginError(true);
+			}
 
-		return false;
+			if (res.data.success) {
+				this.setState({ loginSuccess: true });
+			}
+		} catch (error) {
+			this.setLoginError(true);
+		}
+
+
 	}
 
 	render() {
 		if (this.state.loginSuccess) {
-			return (<Redirect to="/dashboard"/>)
+			return (<Redirect to="/dashboard" />)
 		}
-		
+		console.log(this.state.loginSuccess);
 		return (
 			<div className="LoginPage">
 				{/** Login Page */}
-				<form id="login-form" onSubmit={this.login} noValidate autoComplete="off">
+				<form id="login-form" onSubmit={async (e) => {
+					e.preventDefault();
+					await this.login(e);
+					return false;
+				}}
+					noValidate autoComplete="off">
 					<TextField
-						error={this.state.loginError}
+						error={this.state.isEmailError}
 						type="text"
 						label="Email"
 						name="email"
+						helperText={this.state.emailError}
+						required
 					/>
 					<TextField
+						error={this.state.isPasswordError}
 						label="Password"
 						type="password"
 						name="password"
+						required
+						helperText={this.state.passwordError}
 					/>
 					<Button type="submit" variant="contained" color="primary"> Login </Button>
 				</form>

@@ -1,3 +1,34 @@
 .SignupPage {
+  min-height: 85vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 
+.SignupPage #signup-form{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.SignupPage .MuiFormControl-root{
+  margin: 1em 0!important;
+}
+
+.SignupPage .other-login-options{
+  font-size: 1.4em;
+  padding: 8px;
+  letter-spacing: 0.1ch;
+  display: flex;
+  flex-direction: column;
+}
+
+.SignupPage .other-login-options a{
+  padding: 3px 0;
+  transition: all 0.3s ease-in-out;
+}
+
+.SignupPage .other-login-options a:hover{
+  color: #736EFE;
 }

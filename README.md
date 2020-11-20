@@ -1,3 +1,5 @@
+# Personal Budget app
+It consists of following features:
 #### NodeJS-JWT-Authentication
 - jwt based authentication: jsonwebtoken
 - pre defined username and passwords

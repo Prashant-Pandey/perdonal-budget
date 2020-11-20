@@ -10,7 +10,7 @@ function internalServerError(error) {
 function clientBasedError(error) {
   return {
     err: {
-      status: 401,
+      status: 400,
       message: error
     }
   };
