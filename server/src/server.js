@@ -1,14 +1,22 @@
 const app = require('express')();
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 const jwtMW = require('./middlewares/auth.middleware');
+const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: true });
 
 const port = 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3001',
+  preflightContinue: true,
+  credentials: true
+}));
+app.use(cookieParser());
 
 app.get('/', (req, res) => {
   res.redirect('http://localhost:3001');
@@ -24,12 +32,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/api/dashboard', jwtMW, (req, res) => {
-  res.json({
-    success: true,
-    message: 'Secret dashboard content'
-  });
-});
+app.use('/budget', jwtMW, require('./routes/budget.routes'));
 
 app.get('/api/settings', jwtMW, (req, res) => {
   res.json({

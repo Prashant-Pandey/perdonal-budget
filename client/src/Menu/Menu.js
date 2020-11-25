@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
+import { connect } from "react-redux";
 import './Menu.scss';
-import {Link} from 'react-router-dom'
+import { Link, Route } from 'react-router-dom'
 
-export default class Menu extends Component {
-
-	constructor(props) {
-		super(props);
-	}
-
+class Menu extends Component {
 	render() {
+		console.log(this.props)
 		return (
 			<React.Fragment>
 				<a href="#main-container" className="hidden-visibility">Skip to main content</a>
 				<nav className="menu" role="navigation"
-				aria-label="Main menu">
+					aria-label="Main menu">
 					<ul>
 						<li><Link to="/">Home</Link></li>
 						<li><Link to="/about">About</Link></li>
@@ -25,3 +22,12 @@ export default class Menu extends Component {
 		)
 	}
 }
+
+const mapStateToProps = (state) =>{
+  return{
+    isLoggedIn: state.isLoggedIn
+  }
+}
+
+
+export default connect(mapStateToProps)(Menu);

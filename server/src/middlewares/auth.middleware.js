@@ -8,16 +8,22 @@ const jwtMW = (req, res, next) => {
     const authToken = req.headers.authorization.split(' ')[1];
 
     if (authToken === '' ||
-            authToken === 'null' ||
-            !jwt.verify(authToken, process.env.AUTH_SECRET)) {
+      authToken === 'null' ||
+      !jwt.verify(authToken, process.env.AUTH_SECRET)) {
       throw new Error('UnauthorizedError');
+    }
+
+    const decodedToken = jwt.decode(authToken);
+    req.user_id = decodedToken.id;
+    if (decodedToken.exp < Date.now() / 1000) {
+      throw new Error('Token Expired');
     }
 
     next();
   } catch (err) {
     res.status(401).json({
       success: false,
-      err
+      err: err.message
     });
   }
 };

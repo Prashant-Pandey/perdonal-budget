@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ThemeProvider } from "@material-ui/core/styles";
+import { connect } from 'react-redux';
 import Theme from "../Commons/Theme";
 import Menu from '../Menu/Menu';
 import Hero from '../Hero/Hero';
@@ -11,11 +12,10 @@ import AboutPage from '../AboutPage/AboutPage';
 import LoginPage from '../LoginPage/LoginPage';
 import SignupPage from '../SignupPage/SignupPage';
 import DashboardPage from "../DashboardPage/DashboardPage";
+import Logout from '../Logout/Logout';
 
 function App() {
-  const [isLoggedIn, setLogin] = useState(false);
-  const cookies = document.cookie.split(';');
-
+  
   return (
     <Router>
       <ThemeProvider theme={Theme}>
@@ -38,7 +38,7 @@ function App() {
               <DashboardPage />
             </Route>
             <Route path="/logout">
-
+              <Logout />
             </Route>
             <Route path="/">
               <Hero />
@@ -52,4 +52,6 @@ function App() {
   );
 }
 
-export default App;
+
+
+export default connect()(App);

@@ -3,10 +3,11 @@ import React, { Component } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
+import { connect } from 'react-redux';
 import { Link as RouterLink, Redirect } from 'react-router-dom';
 import './LoginPage.scss';
 
-export default class LoginPage extends Component {
+class LoginPage extends Component {
 
 	constructor(props) {
 		super(props);
@@ -44,8 +45,10 @@ export default class LoginPage extends Component {
 			const res = await Axios.post("http://localhost:3000/auth/login",
 				JSON.stringify(loginJSON), {
 				headers: {
-					"Content-Type": "application/json"
-				}
+					"Content-Type": "application/json",
+					'Access-Control-Allow-Origin': '*',
+				},
+				withCredentials: true,
 			});
 
 			console.log(res);
@@ -55,6 +58,7 @@ export default class LoginPage extends Component {
 			}
 
 			if (res.data.success) {
+				// TODO: Redux
 				this.setState({ loginSuccess: true });
 			}
 		} catch (error) {
@@ -68,7 +72,7 @@ export default class LoginPage extends Component {
 		if (this.state.loginSuccess) {
 			return (<Redirect to="/dashboard" />)
 		}
-		console.log(this.state.loginSuccess);
+		console.log(this.props);
 		return (
 			<div className="LoginPage">
 				{/** Login Page */}
@@ -104,3 +108,21 @@ export default class LoginPage extends Component {
 		)
 	}
 }
+
+
+const mapStateToProps = (state, ownProps) => {
+	return {
+		isLoggedIn: state.isLoggedIn
+	}
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		changeLoginStatus: (isLoggedIn) =>{
+			dispatch({type:'CHANGE_LOGIN_STATUS', isLoggedIn: isLoggedIn})
+		}
+	}
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);

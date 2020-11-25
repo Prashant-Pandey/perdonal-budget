@@ -1,12 +1,16 @@
 // Require Mongoose
 const mongoose = require('mongoose');
-
+const { iBudget, iBudgetType } = require('./Budget');
 // Define a schema
 const Schema = mongoose.Schema;
 
 const iUser = ({ firstName, lastName, email, password, phone }) => {
   return {
-    firstName, lastName, email, password, phone
+    firstName,
+    lastName,
+    email,
+    password,
+    phone
   };
 };
 
@@ -19,7 +23,15 @@ const UserSchema = new Schema({
     required: true
   },
   password: String,
-  phone: String
+  phone: String,
+  budgets: {
+    type: [iBudget],
+    default: []
+  },
+  budgetTypes: {
+    type: [iBudgetType],
+    default: []
+  }
 });
 
 module.exports = {

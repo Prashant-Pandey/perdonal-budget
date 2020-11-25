@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
   res.json({ one: 'one' });
 });
 
-function generateAndSendToken(res, authRes) {
+function generateAndSendToken(authRes) {
   // generating cookie for saving token
   const ttl = 360 * 60 * 60000;
   const tokenObj = {
@@ -19,10 +19,15 @@ function generateAndSendToken(res, authRes) {
   const token = jwt.sign(tokenObj, process.env.AUTH_SECRET, {
     expiresIn: ttl
   });
-  res.cookie('token', token, {
-    maxAge: ttl
-  });
-  return res.json({ success: true, err: null });
+  return [token, ttl];
+}
+
+function generateErrorMessage(errArray) {
+  let msg = '';
+  for (let i = 0; i < errArray.length; i++) {
+    msg += `${errArray[i].msg} of ${errArray[i].param}, `;
+  }
+  return msg;
 }
 
 router.post('/login', [
@@ -33,22 +38,28 @@ router.post('/login', [
   const errors = validationResult(req);
   // if inputs are not sanitized
   if (!errors.isEmpty()) {
-    return res.status(400).json({ err: errors.array() });
+    const msg = generateErrorMessage(errors.array())
+    return res.status(400).json({ err: msg });
   }
   // we have sanitized inputs
   const { email, password } = req.body;
+  console.log(email, password);
   const authRes = await authService.verifyAuth(email, password);
 
   // if user is not valid
   if (authRes.err) {
     return res.status(authRes.err.status).json({
       success: false,
-      token: null,
       err: authRes.err.message
     });
   }
 
-  return generateAndSendToken(res, authRes);
+  // valid response
+  const [token, ttl] = generateAndSendToken(authRes);
+  res.cookie('token', token, {
+    maxAge: ttl
+  });
+  return res.json({ success: true, token, err: null });
 });
 
 router.post('/signup', [
@@ -61,17 +72,12 @@ router.post('/signup', [
   const errors = validationResult(req);
   // if inputs are not sanitized
   if (!errors.isEmpty()) {
-    let msg = '';
-    const errArray = errors.array();
-    for (let i = 0; i < errArray.length; i++) {
-      msg += `${errArray[i].msg} of ${errArray[i].param}, `;
-    }
+    const msg = generateErrorMessage(errors.array());
     return res.status(400).json({ err: msg });
   }
   // we have sanitized inputs
   const userObj = UserObject(req.body);
   const authRes = await authService.signupUser(userObj);
-  console.log(authRes);
   // if user is not valid
   if (authRes.err) {
     return res.status(authRes.err.status).send({
@@ -79,7 +85,21 @@ router.post('/signup', [
     });
   }
 
-  return generateAndSendToken(res, authRes);
+  // valid response
+  const [token, ttl] = generateAndSendToken(authRes);
+  res.cookie('token', token, {
+    maxAge: ttl
+  });
+  return res.json({ success: true, token, err: null });
+});
+
+router.post('/logout', (req, res) => {
+  // const ttl = 0;
+  // res.cookie('token', req.cookies.token, {
+  //   maxAge: ttl
+  // });
+  res.clearCookie('token');
+  return res.json({ success: true, err: null });
 });
 
 module.exports = router;
