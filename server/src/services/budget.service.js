@@ -6,12 +6,13 @@ const errorHandler = require('../common.error.handling');
 
 async function createBudget(userId, budgetObject) {
   try {
-    const budget = await User.updateOne({ _id: userId }, {
+    await User.updateOne({ _id: userId }, {
       $push: {
         budgets: budgetObject
       }
     });
-    return budget;
+    const budget = await User.findOne({ _id: userId, 'budgets.title': budgetObject.title, 'budgets.type': budgetObject.type, 'budgets.cost': budgetObject.cost, 'budgets.date': budgetObject.date }, { 'budgets.$': 1 });
+    return budget.budgets[0];
   } catch (error) {
     return errorHandler.internalServerError(error.message);
   }
@@ -20,7 +21,6 @@ async function createBudget(userId, budgetObject) {
 async function getBudgetById(userId, budgetId) {
   try {
     const budget = await User.findOne({ _id: userId, 'budgets._id': budgetId }, { 'budgets.$': 1 });
-    console.log(budget, userId, budgetId);
     return budget;
   } catch (error) {
     return errorHandler.internalServerError(error.message);
@@ -32,12 +32,16 @@ async function getAllBudgets(userId) {
     const userBudgetData = (await User.findOne({ _id: userId }, { _id: 0, budgets: 1 })).get('budgets');
     return userBudgetData;
   } catch (error) {
+    console.log(error);
     return errorHandler.internalServerError(error.message);
   }
 }
 
 async function getBudgetWithFilters(userId, dateFilter, moneyFilter) {
   let budgets = await getAllBudgets(userId);
+  // if (budgets.err) {
+  //   return budgets;
+  // }
   if (dateFilter) {
     budgets = await getBudgetBetweenDate(budgets, dateFilter.start, dateFilter.end);
   }
@@ -47,7 +51,7 @@ async function getBudgetWithFilters(userId, dateFilter, moneyFilter) {
   return budgets;
 }
 
-async function getBudgetBetweenDate(data, startDate, endDate) {
+async function getBudgetBetweenDate(data = [], startDate, endDate) {
   const filterData = data.filter((budget) => {
     return budget.date >= startDate && budget.date <= endDate;
   });

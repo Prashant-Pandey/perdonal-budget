@@ -7,7 +7,7 @@ const budgetService = require('../services/budget.service');
 router.get('/', async (req, res) => {
   const queryData = req.query;
   const userId = req.user_id;
-
+  console.log(queryData);
   let dateFilter = {};
   let moneyFilter = {};
   if (queryData.startDate || queryData.endDate) {
@@ -17,15 +17,15 @@ router.get('/', async (req, res) => {
     dateFilter = null;
   }
 
+  console.log(queryData);
+
   if (queryData.startMoney || queryData.endMoney) {
     moneyFilter.start = queryData.startMoney ? parseFloat(queryData.startMoney) : -Infinity;
     moneyFilter.end = queryData.endMoney ? parseInt(queryData.endMoney) : Infinity;
   } else {
     moneyFilter = null;
   }
-
   const budgets = await budgetService.getBudgetWithFilters(userId, dateFilter, moneyFilter);
-
   res.json(budgets);
 });
 // get a particular budget budgets of the user
@@ -38,7 +38,6 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   const userId = req.user_id;
   const budgetObject = req.body;
-  console.log(userId, budgetObject);
   const budget = await budgetService.createBudget(userId, budgetObject);
   if (budget.err) {
     return res.status(budget.err.status).send({
@@ -72,55 +71,5 @@ router.delete('/:id', async (req, res) => {
   }
   return res.json(budget);
 });
-
-router.get('/types', async (req, res) => {
-  const userId = req.user_id;
-  // const budgetTypes = await budgetTypeService.getAllBudgetTypes(userId);
-  res.json({ userId });
-});
-
-// router.get('/types/:id', async (req, res) => {
-//   const userId = req.user_id;
-//   const budget = await budgetTypeService.getBudgetTypeById(userId, req.params.id);
-//   res.json(budget);
-// });
-// // create a budget
-// router.post('/types', async (req, res) => {
-//   const userId = req.user_id;
-//   const budgetObject = req.body;
-//   console.log(userId, budgetObject);
-//   const budget = await budgetTypeService.createBudgetType(userId, budgetObject);
-//   if (budget.err) {
-//     return res.status(budget.err.status).send({
-//       err: budget.err.message
-//     });
-//   }
-//   res.json(budget);
-// });
-// // update a budget
-// router.put('/types/:id', async (req, res) => {
-//   const userId = req.user_id;
-//   const budgetObject = req.body;
-//   const budgetId = req.params.id;
-//   const budget = await budgetTypeService.updateBudgetType(userId, budgetId, budgetObject);
-//   if (budget.err) {
-//     return res.status(budget.err.status).send({
-//       err: budget.err.message
-//     });
-//   }
-//   return res.json(budget);
-// });
-// // delete a budget
-// router.delete('/types/:id', async (req, res) => {
-//   const userId = req.user_id;
-//   const budgetId = req.params.id;
-//   const budget = await budgetTypeService.deleteBudget(userId, budgetId);
-//   if (budget.err) {
-//     return res.status(budget.err.status).send({
-//       err: budget.err.message
-//     });
-//   }
-//   return res.json(budget);
-// });
 
 module.exports = router;

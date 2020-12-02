@@ -38,12 +38,11 @@ router.post('/login', [
   const errors = validationResult(req);
   // if inputs are not sanitized
   if (!errors.isEmpty()) {
-    const msg = generateErrorMessage(errors.array())
+    const msg = generateErrorMessage(errors.array());
     return res.status(400).json({ err: msg });
   }
   // we have sanitized inputs
   const { email, password } = req.body;
-  console.log(email, password);
   const authRes = await authService.verifyAuth(email, password);
 
   // if user is not valid

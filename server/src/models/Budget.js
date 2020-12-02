@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
-const budgetTypeNature = ['INCOME', 'EXPENSE'];
+// const budgetTypeNature = ['INCOME', 'EXPENSE'];
 
 const iBudgetType = new mongoose.Schema({
-  name: String,
-  nature: {
-    enum: budgetTypeNature
+  name: {
+    type: String,
+    unique: true
   }
 });
 

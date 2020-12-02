@@ -1,0 +1,27 @@
+
+section.hero {
+    background-color: #b4c6f0;
+    background-image: url('../../assets/budgetHero.svg');
+    background-size: 270px;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    padding: 40px 0 200px;
+}
+
+section.hero h1, section.hero h2 {
+    text-align: center;
+    margin: auto;
+}
+
+section.hero h1 a{
+    text-decoration: none;
+    color: #4d5791;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+section.hero h2{
+    color: #6976bd;
+    max-width: 40ch;
+    text-align: center;
+}

@@ -2,10 +2,13 @@ require('dotenv').config();
 const User = require('../models/User').User;
 
 const errorHandler = require('../common.error.handling');
-// const Budget = require('../models/Budget').budgetSchema;
 
 async function createBudgetType(userId, budgetTypeObj) {
   try {
+    const checkingExistingBudget = await User.findOne({ _id: userId, 'budgetTypes.name': budgetTypeObj.name }, { 'budgetTypes.$': 1 });
+    if (checkingExistingBudget) {
+      return errorHandler.clientBasedError('Budget type already created');
+    }
     const budgetType = await User.updateOne({ _id: userId }, {
       $push: {
         budgetTypes: budgetTypeObj
@@ -28,17 +31,13 @@ async function getBudgetTypeById(userId, budgetTypeId) {
 }
 
 async function getAllBudgetTypes(userId) {
-  console.log('done::::');
-  // try {
-  //   console.log(userId);
-  //   const userBudgetData = await (await User.findOne({ _id: userId }, { _id: 0, budgetTypes: 1 })).get('budgetTypes');
-  //   console.log(userBudgetData);
-  //   return userBudgetData;
-  // } catch (error) {
-  //   console.log(error);
-  //   return errorHandler.internalServerError(error.message);
-  // }
-  return { one: 'one' };
+  try {
+    const userBudgetData = await (await User.findOne({ _id: userId }, { _id: 0, budgetTypes: 1 })).get('budgetTypes');
+    return userBudgetData;
+  } catch (error) {
+    console.log(error);
+    return errorHandler.internalServerError(error.message);
+  }
 }
 
 async function getBudgetWithFilters(userId, nature, name) {

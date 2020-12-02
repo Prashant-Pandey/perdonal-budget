@@ -1,0 +1,19 @@
+.monthly-stats{
+  display: flex;
+  flex-direction: column;
+}
+
+.startDate-endDate-container{
+  display: grid;
+  grid-template-columns: 1fr 1fr 0fr;
+  grid-template-rows: 1fr;
+  gap: 0px 10px;
+  grid-template-areas:
+    ". . .";
+    padding: 16px;
+}
+
+.startDate-endDate-container button{
+  padding: 8px 26px !important;
+  line-height: 0.5 !important;
+}
