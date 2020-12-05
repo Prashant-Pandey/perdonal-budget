@@ -24,7 +24,6 @@ export default function DateRangeBudget({ budgets }) {
 		{ key: 'cost', name: 'Cost' },
 		{ key: 'date', name: 'Date' }
 	];
-	// console.log(budgets);
 	// let chartJSData = {
 	// 	datasets: [{
 	// 		data: [],

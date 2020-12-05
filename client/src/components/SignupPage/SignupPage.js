@@ -61,7 +61,6 @@ class SignupPage extends Component {
 			return (<Redirect to="/dashboard" />)
 		}
 		const { message } = this.props;
-		console.log(message);
 		return (
 			<div className="SignupPage">
 				<Snackbar

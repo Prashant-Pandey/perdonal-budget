@@ -1,32 +1,31 @@
-import { dispatch } from 'd3';
 import { AuthService } from '../services/AuthService';
 import { actions } from './index';
-const showError = function (error, action) {
-  dispatch({
-    type: action
-  });
-
-  dispatch({
-    type: actions.setMessage,
-    payload: error
-  });
-}
 
 export const login = (loginJSON) => (dispatch) => {
   return new AuthService().login(loginJSON).then((data) => {
-    if (data.err) {
-      showError(data.err, actions.loginFail);
+    if (data.error) {
+      console.log(data);
+      dispatch({
+        type: actions.loginFail
+      });
+      dispatch({
+        type: actions.setMessage,
+        payload: data
+      })
       return Promise.reject();
     }
 
     dispatch({
       type: actions.loginSuccess,
-      isLoggedIn: true
+      payload: data.ttl
     });
 
     return Promise.resolve();
-  }).catch((err) => {
-    showError(err.message, actions.loginFail);
+  }).catch((error) => {
+    dispatch({
+      type: actions.loginFail,
+      payload: error
+    })
     return Promise.reject();
   })
 }
@@ -34,25 +33,48 @@ export const login = (loginJSON) => (dispatch) => {
 export const signup = (signupJSON) => (dispatch) => {
   return new AuthService().signup(signupJSON).then((data) => {
     if (data.err) {
-      showError(data.err, actions.signupFail);
+      // showError(dispatch, data.err, actions.signupFail);
       return Promise.reject();
     }
 
     dispatch({
       type: actions.loginSuccess,
-      isLoggedIn: true
+      payload: data.ttl
     });
 
     return Promise.resolve();
   }).catch((err) => {
-    showError(err.message, actions.signupFail);
+    // showError(dispatch, err.message, actions.signupFail);
     return Promise.reject();
   })
 }
 
-export const logout = () => {
-  return {
-    type: actions.logout,
-    isLoggedIn: false
-  }
+export const refresh = () => (dispatch) => {
+  return new AuthService().refresh().then((data) => {
+    if (data.err) {
+      // showError(dispatch, data.err, actions.refreshFail);
+      return Promise.reject();
+    }
+
+    dispatch({
+      type: actions.refresh,
+      payload: data.ttl
+    });
+  }).catch((err = "Connectivity error") => {
+    // showError(dispatch, err.message, actions.refreshFail);
+    return Promise.reject();
+  })
+}
+
+export const logout = () => (dispatch) => {
+  return new AuthService().logout().then((data) => {
+    dispatch({
+      type: actions.logout
+    });
+
+    return Promise.resolve();
+  }).catch((err) => {
+    // showError(dispatch, err.message, actions.logout);
+    return Promise.reject();
+  })
 }

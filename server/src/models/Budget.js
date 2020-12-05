@@ -6,6 +6,9 @@ const iBudgetType = new mongoose.Schema({
   name: {
     type: String,
     unique: true
+  },
+  goal: {
+    type: Number
   }
 });
 
@@ -26,7 +29,7 @@ const iBudget = new mongoose.Schema({
     type: Number
   },
   date: {
-    type: Date
+    type: String
   }
 }, {
   timestamps: true

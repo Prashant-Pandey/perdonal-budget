@@ -30,7 +30,7 @@ const UserSchema = new Schema({
   },
   budgetTypes: {
     type: [iBudgetType],
-    default: []
+    default: [{ name: 'EXPENSE', goal: 0 }]
   }
 });
 

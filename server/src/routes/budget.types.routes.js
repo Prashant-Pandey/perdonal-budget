@@ -28,9 +28,10 @@ router.post('/', async (req, res) => {
 // update a budget
 router.put('/:id', async (req, res) => {
   const userId = req.user_id;
-  const budgetObject = req.body;
+  const budgetTypeObject = req.body;
   const budgetId = req.params.id;
-  const budget = await budgetTypeService.updateBudgetType(userId, budgetId, budgetObject);
+  const budget = await budgetTypeService.updateBudgetType(userId, budgetId, budgetTypeObject);
+  console.log(budget);
   if (budget.err) {
     return res.status(budget.err.status).send({
       err: budget.err.message
@@ -42,7 +43,7 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const userId = req.user_id;
   const budgetId = req.params.id;
-  const budget = await budgetTypeService.deleteBudget(userId, budgetId);
+  const budget = await budgetTypeService.deleteBudgetTypes(userId, budgetId);
   if (budget.err) {
     return res.status(budget.err.status).send({
       err: budget.err.message

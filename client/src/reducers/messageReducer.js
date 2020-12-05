@@ -1,7 +1,9 @@
 import {actions} from "../actions/index";
 
 const initialState = {
-  message: ''
+  message: '',
+  error: false,
+  success: false
 };
 
 export default function (state = initialState, action) {
@@ -9,10 +11,20 @@ export default function (state = initialState, action) {
 
   switch (type) {
     case actions.setMessage:
-      return { message: payload };
+      let type = 'success';
+      let message = payload.message
+      if (payload.error) {
+        type = 'error';
+        message = `Server Response ${payload.status}: `+ message
+      }
+      const newState = {
+        message
+      };
+      newState[type] = message;
+      return newState;
 
     case actions.clearMessage:
-      return { message: "" };
+      return { message: '' };
 
     default:
       return state;

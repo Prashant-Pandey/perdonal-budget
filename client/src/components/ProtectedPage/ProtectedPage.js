@@ -1,7 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-const ProtectedPage = ({ isLoggedIn, children, ...rest }) => {
+import { getBudgetTypes } from '../../actions/budgetTypeAction';
+import { getAllBudgets } from '../../actions/budgetAction';
+const ProtectedPage = ({ isLoggedIn, children, setShowMessage, setError, dispatch, ...rest }) => {
+  const formatDate = (dateObj) => {
+    return dateObj.getFullYear() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getDate();
+  }
+
+  useEffect(() => {
+    try {
+      const endDate = formatDate(new Date()), startDate = formatDate(new Date(Date.now() - 30 * 24 * 60 * 60 * 1000));
+      dispatch(getAllBudgets(startDate, endDate));
+      dispatch(getBudgetTypes());
+    } catch (error) {
+      setShowMessage(true);
+      setError("Failed to fetch Budget types");
+    }
+  }, [])
   return (
     <Route
       {...rest}

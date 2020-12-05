@@ -34,8 +34,6 @@ app.use('/budget', jwtMW, require('./routes/budget.routes'));
 
 app.use('/budget-type', jwtMW, require('./routes/budget.types.routes'));
 
-app.use('/goals', jwtMW, require('./routes/budget.types.routes'));
-
 app.get('/api/settings', jwtMW, (req, res) => {
   res.json({
     success: true,

@@ -12,19 +12,19 @@ class Menu extends Component {
 		);
 	}
 	render() {
-		console.log(this.props)
 		return (
 			<React.Fragment>
 				<a href="#main-container" className="hidden-visibility">Skip to main content</a>
 				<nav className="menu" role="navigation"
 					aria-label="Main menu">
 					<ul>
-						<li><Link to="/">Home</Link></li>
+						<li><Link to="/" >Home</Link></li>
 						<li><Link to="/about">About</Link></li>
 						{!this.props.isLoggedIn && <li><Link to="/login">Login</Link></li>}
 						{!this.props.isLoggedIn && <li><Link to="/signup">Signup</Link></li>}
 						{this.props.isLoggedIn && <li><Link to="/dashboard">Dashboard</Link></li>}
-						{this.props.isLoggedIn && <li><button onClick={(e) => {
+						{this.props.isLoggedIn && <li><Link to="/settings">Settings</Link></li>}
+						{this.props.isLoggedIn && <li><button className="logoutButton" onClick={(e) => {
 							e.preventDefault();
 							this.logout();
 							return false;

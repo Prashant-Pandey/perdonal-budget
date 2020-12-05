@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
 
 function generateAndSendToken(authRes) {
   // generating cookie for saving token
-  const ttl = 360 * 60 * 60000;
+  const ttl = 30 * 6000;
   const tokenObj = {
     id: authRes._id,
     email: authRes.email,
@@ -39,17 +39,23 @@ router.post('/login', [
   // if inputs are not sanitized
   if (!errors.isEmpty()) {
     const msg = generateErrorMessage(errors.array());
-    return res.status(400).json({ err: msg });
+    return res.status(400).json({
+      success: false,
+      error: true,
+      message: msg
+    });
   }
   // we have sanitized inputs
   const { email, password } = req.body;
   const authRes = await authService.verifyAuth(email, password);
-
+  console.log(authRes);
   // if user is not valid
   if (authRes.err) {
+    console.log(authRes);
     return res.status(authRes.err.status).json({
       success: false,
-      err: authRes.err.message
+      error: true,
+      message: authRes.err.message
     });
   }
 
@@ -58,7 +64,7 @@ router.post('/login', [
   res.cookie('token', token, {
     maxAge: ttl
   });
-  return res.json({ success: true, token, err: null });
+  return res.json({ success: true, ttl, error: false });
 });
 
 router.post('/signup', [
@@ -72,7 +78,11 @@ router.post('/signup', [
   // if inputs are not sanitized
   if (!errors.isEmpty()) {
     const msg = generateErrorMessage(errors.array());
-    return res.status(400).json({ err: msg });
+    return res.status(400).json({
+      success: false,
+      error: true,
+      message: msg
+    });
   }
   // we have sanitized inputs
   const userObj = UserObject(req.body);
@@ -80,7 +90,9 @@ router.post('/signup', [
   // if user is not valid
   if (authRes.err) {
     return res.status(authRes.err.status).send({
-      err: authRes.err.message
+      success: false,
+      error: true,
+      message: authRes.err.message
     });
   }
 
@@ -89,16 +101,31 @@ router.post('/signup', [
   res.cookie('token', token, {
     maxAge: ttl
   });
-  return res.json({ success: true, token, err: null });
+  return res.json({ success: true, ttl, err: null });
 });
 
-router.post('/logout', (req, res) => {
-  // const ttl = 0;
-  // res.cookie('token', req.cookies.token, {
-  //   maxAge: ttl
-  // });
-  res.clearCookie('token');
-  return res.json({ success: true, err: null });
+router.post('/refresh', (req, res) => {
+  if (!req.headers.authorization) {
+    return res.status(400).json({ success: false, err: 'not authorized' });
+  }
+  const authToken = req.headers.authorization.split(' ')[1];
+  if (authToken === '' ||
+    authToken === 'null' || !jwt.verify(authToken, process.env.AUTH_SECRET)) {
+    return res.status(400).json({ success: false, err: 'invalid token' });
+  }
+  const decodedToken = jwt.decode(authToken);
+  if (decodedToken.exp < Date.now() / 1000) {
+    res.status(401).json({
+      success: false,
+      err: 'Token Already Expired'
+    });
+    return;
+  }
+  // valid response
+  res.cookie('token', authToken, {
+    maxAge: 6000
+  });
+  return res.json({ success: true, ttl: 6000, err: null });
 });
 
 module.exports = router;

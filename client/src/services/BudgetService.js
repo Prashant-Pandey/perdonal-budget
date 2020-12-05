@@ -1,29 +1,42 @@
 import Axios from 'axios';
 import { getCookie } from "../commons/cookie";
-const BUDGET_URL = "http://localhost:3000"+"/budget";
+import connectAPI from './commonService';
+const service = 'budget';
 export class BudgetService {
+  async getAllBudgets() {
+    const withCredentials = false, method = 'get', params = {}, body = {}, headers = {
+      'Authorization': `Bearer ${getCookie('token')}`
+    }
+    return connectAPI({ method, service, headers, params, body, withCredentials });
+  }
   async getAllBudgetBetweenDates(startDate, endDate) {
-    console.log(getCookie('token'));
-    const res = await Axios.get(BUDGET_URL + `?startDate=${startDate}&endDate=${endDate}`, {
-      headers: {
-        'Authorization': `Bearer ${getCookie('token')}`,
-        "Content-Type": "application/json",
-      }
-    });
-    return res.data;
+    const withCredentials = false, method = 'get', params = {
+      startDate,
+      endDate
+    }, body = {}, headers = {
+      'Authorization': `Bearer ${getCookie('token')}`
+    }
+    return connectAPI({ method, service, headers, params, body, withCredentials });
   }
 
   async createBudgets(budgetJSON) {
-    const res = await Axios.post(BUDGET_URL, budgetJSON, {
-      headers: {
-        'Authorization': `Bearer ${getCookie('token')}`,
-        "Content-Type": "application/json",
-      },
-      withCredentials: true,
-    });
-    return res.data;
+    const withCredentials = false, method = 'post', params = {}, body = budgetJSON, headers = {
+      'Authorization': `Bearer ${getCookie('token')}`
+    }
+    return connectAPI({ method, service, headers, params, body, withCredentials });
   }
 
+  async updateBudget(budgetId, budgetJSON) {
+    const withCredentials = false, method = 'put', params = {}, body = budgetJSON, headers = {
+      'Authorization': `Bearer ${getCookie('token')}`
+    }
+    return connectAPI({ method, service: service+`/${budgetId}`, headers, params, body, withCredentials });
+  }
 
-
+  async deleteBudgets(budgetId) {
+    const withCredentials = false, method = 'delete', params = {}, body = {}, headers = {
+      'Authorization': `Bearer ${getCookie('token')}`
+    }
+    return connectAPI({ method, service: service+`/${budgetId}`, headers, params, body, withCredentials });
+  }
 }

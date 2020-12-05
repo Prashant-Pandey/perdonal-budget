@@ -17,8 +17,6 @@ router.get('/', async (req, res) => {
     dateFilter = null;
   }
 
-  console.log(queryData);
-
   if (queryData.startMoney || queryData.endMoney) {
     moneyFilter.start = queryData.startMoney ? parseFloat(queryData.startMoney) : -Infinity;
     moneyFilter.end = queryData.endMoney ? parseInt(queryData.endMoney) : Infinity;

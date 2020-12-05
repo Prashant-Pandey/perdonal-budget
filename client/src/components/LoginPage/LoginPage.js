@@ -35,7 +35,6 @@ class LoginPage extends Component {
 			'email': e.target.email.value,
 			'password': e.target.password.value,
 		};
-		console.log(loginJSON);
 		if (loginJSON.email == "" || !loginJSON.email || loginJSON.password == "" || !loginJSON.password) return this.setLoginError(true);
 
 		this.props.dispatch(login(loginJSON)).then(() => {

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import MonthlyStats from '../MonthlyStats/MonthlyStats';
+import CRUDBudgets from '../Budgets/CRUDBudgets';
 import './DashboardPage.scss';
-import CreateBudget from '../CreateBudget/CreateBudget';
 import { connect } from 'react-redux';
 
 class DashboardPage extends Component {
@@ -10,11 +9,9 @@ class DashboardPage extends Component {
 			<div className="DashboardPage">
 				<h1>Dashboard</h1>
 				<div className="stats-area">
-					<MonthlyStats />
+					<CRUDBudgets />
 				</div>
-				<div className="data-input-area">
-					<CreateBudget />
-				</div>
+				{/* <CreateBudget/> */}
 			</div>
 		)
 	}

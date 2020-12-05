@@ -5,13 +5,21 @@ const errorHandler = require('../common.error.handling');
 // const Budget = require('../models/Budget').budgetSchema;
 
 async function createBudget(userId, budgetObject) {
+  budgetObject.cost = +budgetObject.cost;
+  console.log(budgetObject, userId);
   try {
     await User.updateOne({ _id: userId }, {
       $push: {
         budgets: budgetObject
       }
     });
-    const budget = await User.findOne({ _id: userId, 'budgets.title': budgetObject.title, 'budgets.type': budgetObject.type, 'budgets.cost': budgetObject.cost, 'budgets.date': budgetObject.date }, { 'budgets.$': 1 });
+
+    const budget = await User.find({
+      _id: userId,
+      'budgets.title': budgetObject.title
+    }, { 'budgets.$': 1 });
+    // 'budgets.title': budgetObject.title, 'budgets.type': budgetObject.type, 'budgets.date': budgetObject.date
+    console.log(budget, ';;;;;;;;');
     return budget.budgets[0];
   } catch (error) {
     return errorHandler.internalServerError(error.message);
@@ -39,9 +47,6 @@ async function getAllBudgets(userId) {
 
 async function getBudgetWithFilters(userId, dateFilter, moneyFilter) {
   let budgets = await getAllBudgets(userId);
-  // if (budgets.err) {
-  //   return budgets;
-  // }
   if (dateFilter) {
     budgets = await getBudgetBetweenDate(budgets, dateFilter.start, dateFilter.end);
   }
@@ -53,7 +58,8 @@ async function getBudgetWithFilters(userId, dateFilter, moneyFilter) {
 
 async function getBudgetBetweenDate(data = [], startDate, endDate) {
   const filterData = data.filter((budget) => {
-    return budget.date >= startDate && budget.date <= endDate;
+    const budgetDate = new Date(budget.date);
+    return budgetDate >= startDate && budgetDate <= endDate;
   });
   return filterData;
 }
@@ -90,12 +96,11 @@ async function updateBudget(userId, budgetId, budgetObject) {
 
 async function deleteBudget(userId, budgetId) {
   try {
-    const budget = await User.updateOne({ _id: userId, 'budgets._id': budgetId }, {
+    const budget = await User.updateOne({ _id: userId }, {
       $pull: {
-        'budgets.$': { _id: budgetId }
+        budgets: { _id: budgetId }
       }
     });
-
     if (budget === null) {
       const res = errorHandler.clientBasedError('Budget does not exists');
       return res;

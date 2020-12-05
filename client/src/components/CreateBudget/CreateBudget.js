@@ -32,7 +32,10 @@ class CreateBudget extends Component {
 			});
 			return;
 		}
-
+		e.target.title.value = '';
+		e.target.type.value = '';
+		e.target.cost.value = '';
+		e.target.date.value = '';
 		this.props.dispatch(create(budgetData)).then(() => {
 			this.setState({ ...this.state, budgetAdded: true });
 		}).catch(() => {

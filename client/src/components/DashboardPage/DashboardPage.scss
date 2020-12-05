@@ -1,14 +1,8 @@
 .DashboardPage {
-  display: grid;
-  grid-template-columns: 1fr 0.5fr;
-  grid-template-rows: 0fr 1fr;
-  gap: 0px 0px;
-  grid-template-areas:
-    "heading heading"
-    ". .";
-  min-height: 85vh;
+  min-height: 80vh;
+  padding: 16px;
 }
 
 .DashboardPage h1{
-  grid-area: heading;
+  
 }

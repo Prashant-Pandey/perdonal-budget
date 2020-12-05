@@ -1,6 +1,6 @@
 require('dotenv').config();
 const User = require('../models/User').User;
-
+const ObjectId = require('mongoose').Types.ObjectId;
 const errorHandler = require('../common.error.handling');
 
 async function createBudgetType(userId, budgetTypeObj) {
@@ -9,12 +9,13 @@ async function createBudgetType(userId, budgetTypeObj) {
     if (checkingExistingBudget) {
       return errorHandler.clientBasedError('Budget type already created');
     }
-    const budgetType = await User.updateOne({ _id: userId }, {
+    await User.updateOne({ _id: userId }, {
       $push: {
         budgetTypes: budgetTypeObj
       }
     });
-    return budgetType;
+    const budgetType = await User.findOne({ _id: userId, 'budgetTypes.name': budgetTypeObj.name }, { 'budgetTypes.$': 1 });
+    return await budgetType.budgetTypes[0];
   } catch (error) {
     return errorHandler.internalServerError(error.message);
   }
@@ -66,13 +67,21 @@ async function getBudgetTypesName(data, startMoney, endMoney) {
   return filterData;
 }
 
-async function updateBudgetType(userId, budgetId, budgetObject) {
-  const updateObj = {};
-  for (const key in budgetObject) {
-    updateObj[`budgetTypes.$.${key}`] = budgetObject[key];
-  }
+async function updateBudgetType(userId, budgetTypeId, budgetTypeObj) {
   try {
-    const budgetType = await User.updateOne({ _id: userId, 'budgetTypes._id': budgetId }, {
+    const updateObj = {};
+    for (const key in budgetTypeObj) {
+      updateObj[`budgetTypes.$.${key}`] = budgetTypeObj[key];
+    }
+    let checkingExistingBudget = false;
+    if (budgetTypeObj.name) {
+      checkingExistingBudget = await User.findOne({ _id: userId, 'budgetTypes.name': budgetTypeObj.name }, { 'budgetTypes.$': 1 });
+    }
+    if (checkingExistingBudget) {
+      return errorHandler.clientBasedError('Budget type already created');
+    }
+
+    const budgetType = await User.update({ _id: userId, 'budgetTypes._id': budgetTypeId }, {
       $set: updateObj
     });
 
@@ -90,12 +99,11 @@ async function updateBudgetType(userId, budgetId, budgetObject) {
 
 async function deleteBudgetTypes(userId, budgetTypeId) {
   try {
-    const budgetType = await User.updateOne({ _id: userId, 'budgetTypes._id': budgetTypeId }, {
+    const budgetType = await User.updateOne({ _id: userId }, {
       $pull: {
-        'budgetTypes.$': { _id: budgetTypeId }
+        budgetTypes: { _id: ObjectId(budgetTypeId) }
       }
     });
-
     if (budgetType === null) {
       const res = errorHandler.clientBasedError('Budget does not exists');
       return res;
