@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
 
 function generateAndSendToken(authRes) {
   // generating cookie for saving token
-  const ttl = 30 * 6000;
+  const ttl = 60000;
   const tokenObj = {
     id: authRes._id,
     email: authRes.email,
@@ -48,10 +48,8 @@ router.post('/login', [
   // we have sanitized inputs
   const { email, password } = req.body;
   const authRes = await authService.verifyAuth(email, password);
-  console.log(authRes);
   // if user is not valid
   if (authRes.err) {
-    console.log(authRes);
     return res.status(authRes.err.status).json({
       success: false,
       error: true,
@@ -109,6 +107,7 @@ router.post('/refresh', (req, res) => {
     return res.status(400).json({ success: false, err: 'not authorized' });
   }
   const authToken = req.headers.authorization.split(' ')[1];
+  console.log(req.headers.authorization);
   if (authToken === '' ||
     authToken === 'null' || !jwt.verify(authToken, process.env.AUTH_SECRET)) {
     return res.status(400).json({ success: false, err: 'invalid token' });
@@ -125,7 +124,7 @@ router.post('/refresh', (req, res) => {
   res.cookie('token', authToken, {
     maxAge: 6000
   });
-  return res.json({ success: true, ttl: 6000, err: null });
+  return res.json({ success: true, ttl: 60000, err: null });
 });
 
 module.exports = router;

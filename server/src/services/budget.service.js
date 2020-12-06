@@ -6,7 +6,6 @@ const errorHandler = require('../common.error.handling');
 
 async function createBudget(userId, budgetObject) {
   budgetObject.cost = +budgetObject.cost;
-  console.log(budgetObject, userId);
   try {
     await User.updateOne({ _id: userId }, {
       $push: {
@@ -19,8 +18,8 @@ async function createBudget(userId, budgetObject) {
       'budgets.title': budgetObject.title
     }, { 'budgets.$': 1 });
     // 'budgets.title': budgetObject.title, 'budgets.type': budgetObject.type, 'budgets.date': budgetObject.date
-    console.log(budget, ';;;;;;;;');
-    return budget.budgets[0];
+    console.log(budget, ';;;;;;;; budgets');
+    return budget[0].budgets[0];
   } catch (error) {
     return errorHandler.internalServerError(error.message);
   }
@@ -40,7 +39,6 @@ async function getAllBudgets(userId) {
     const userBudgetData = (await User.findOne({ _id: userId }, { _id: 0, budgets: 1 })).get('budgets');
     return userBudgetData;
   } catch (error) {
-    console.log(error);
     return errorHandler.internalServerError(error.message);
   }
 }
@@ -66,7 +64,6 @@ async function getBudgetBetweenDate(data = [], startDate, endDate) {
 
 async function getBudgetBetweenMoneyLimits(data, startMoney, endMoney) {
   const filterData = data.filter((val) => {
-    console.log(val.cost);
     return val.cost >= startMoney && val.cost <= endMoney;
   });
   return filterData;
@@ -89,7 +86,6 @@ async function updateBudget(userId, budgetId, budgetObject) {
 
     return budget;
   } catch (error) {
-    console.log(error.message);
     return errorHandler.internalServerError(error.message);
   }
 }

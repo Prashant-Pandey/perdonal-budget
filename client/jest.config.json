@@ -1,0 +1,6 @@
+{
+  "name": "kharcha",
+  "jest": {
+    "verbose": true
+  }
+}

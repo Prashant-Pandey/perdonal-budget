@@ -17,25 +17,17 @@ import SignupPage from '../SignupPage/SignupPage';
 import DashboardPage from "../DashboardPage/DashboardPage";
 import Settings from "../Settings/Settings";
 import ProtectedPage from '../ProtectedPage/ProtectedPage';
-
-import Timer from '../Timer/Timer';
+import Popup from '../Popup/Popup';
 import { actions } from '../../actions';
+import { refresh } from '../../actions/authAction';
 
 function App(props) {
 
-  const [showMessage, setShowMessage] = useState(false);
-  const [error, setError] = useState('');
-
   useEffect(() => {
-    // get budget types action
-
-  }, []);
-
-
-  const dismissMessage = () => {
-    setShowMessage(false);
-    setError('');
-  };
+    if (props.token && props.token !== '') {
+      props.refreshToken();
+    }
+  }, [])
 
   return (
     <Router>
@@ -56,7 +48,7 @@ function App(props) {
               </div>
             </MuiAlert>
           </Snackbar>
-
+          <Popup/>
           <Switch>
             <Route path="/about">
               <Hero />
@@ -69,12 +61,12 @@ function App(props) {
               <SignupPage />
             </Route>
             <Route path="/dashboard" >
-              <ProtectedPage setShowMessage={setShowMessage} setError={setShowMessage}>
+              <ProtectedPage>
                 <DashboardPage />
               </ProtectedPage>
             </Route>
             <Route path="/settings" >
-              <ProtectedPage setShowMessage={setShowMessage} setError={setShowMessage}>
+              <ProtectedPage>
                 <Settings />
               </ProtectedPage>
             </Route>
@@ -94,14 +86,18 @@ const mapStateToProps = (state) => {
   return {
     message: state.msg.message,
     isError: state.msg.error,
-    isSuccess: state.msg.success
+    isSuccess: state.msg.success,
+    token: state.auth.token
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     clearMessage: () => {
-      dispatch(actions.clearMessage)
+      dispatch({ type: actions.clearMessage })
+    },
+    refreshToken: () => {
+      dispatch(refresh())
     }
   }
 }

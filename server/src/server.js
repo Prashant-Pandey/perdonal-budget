@@ -42,7 +42,6 @@ app.get('/api/settings', jwtMW, (req, res) => {
 });
 
 app.use(function (err, req, res, next) {
-  console.log(req.headers);
   if (err.name === 'UnauthorizedError') {
     res.status(401).json({
       success: false,

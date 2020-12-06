@@ -26,7 +26,7 @@ export const getBudgetBetweenDates = (startDate, endDate) => (dispatch) => {
       });
 
       return Promise.resolve();
-    }).catch((err) => {
+    }).catch((err = { message: "connection error", error: true }) => {
       dispatchError(dispatch, err.message, actions.getBudgetsBetweenTwoDateFailed)
       return Promise.reject();
     })
@@ -38,19 +38,19 @@ export const getAllBudgets = () => (dispatch) => {
     .then((data) => {
 
       if (!data || data.error) {
-        dispatchError(dispatch, data, actions.getBudgetsBetweenTwoDateFailed)
+        dispatchError(dispatch, data, actions.getAllBudgetsFailed)
         return Promise.reject();
       }
 
       dispatch({
-        type: actions.getBudgetsBetweenTwoDate,
+        type: actions.getAllBudgets,
         payload: data
       });
 
       return Promise.resolve();
 
-    }).catch((err) => {
-      dispatchError(dispatch, err.message, actions.getBudgetsBetweenTwoDateFailed)
+    }).catch((err = { message: "connection error", error: true }) => {
+      dispatchError(dispatch, err.message, actions.getAllBudgetsFailed)
       return Promise.reject();
     })
 }
@@ -72,7 +72,7 @@ export const createBudget = (budgetJSON) => (dispatch) => {
 
       return Promise.resolve();
 
-    }).catch((err) => {
+    }).catch((err = { message: "connection error", error: true }) => {
       dispatchError(dispatch, err.message, actions.createBudgetFailed)
       return Promise.reject();
     })
@@ -88,7 +88,7 @@ export const updateBudget = (key, budgetJSON) => (dispatch) => {
         dispatchError(dispatch, data, actions.updateBudgetFailed)
         return Promise.reject();
       }
-      
+
       dispatch({
         type: actions.updateBudget,
         payload: { id: key, data: budgetJSON }
@@ -96,7 +96,7 @@ export const updateBudget = (key, budgetJSON) => (dispatch) => {
 
       return Promise.resolve();
 
-    }).catch((err) => {
+    }).catch((err = { message: "connection error", error: true }) => {
       dispatchError(dispatch, err.message, actions.updateBudgetFailed)
       return Promise.reject();
     })
@@ -120,7 +120,7 @@ export const deleteBudget = (budgetId) => (dispatch) => {
 
       return Promise.resolve();
 
-    }).catch((err) => {
+    }).catch((err = { message: "connection error", error: true }) => {
       dispatchError(dispatch, err.message, actions.deleteBudgetFailed)
       return Promise.reject();
     })

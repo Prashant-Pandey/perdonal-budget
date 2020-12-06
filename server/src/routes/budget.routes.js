@@ -7,7 +7,6 @@ const budgetService = require('../services/budget.service');
 router.get('/', async (req, res) => {
   const queryData = req.query;
   const userId = req.user_id;
-  console.log(queryData);
   let dateFilter = {};
   let moneyFilter = {};
   if (queryData.startDate || queryData.endDate) {

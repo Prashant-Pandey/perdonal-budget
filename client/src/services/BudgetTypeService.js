@@ -7,6 +7,7 @@ export class BudgetTypeService {
     const withCredentials = false, method = 'get', params = {}, body = {}, headers = {
       'Authorization': `Bearer ${getCookie('token')}`
     }
+    console.log(headers);
     return connectAPI({ method, service, headers, params, body, withCredentials });
   }
 

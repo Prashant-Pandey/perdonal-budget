@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import './Menu.scss';
 import { Link, Redirect } from 'react-router-dom';
 import { logout } from '../../actions/authAction';
+import Timer from '../Timer/Timer';
 
 class Menu extends Component {
 	logout = () => {
@@ -18,6 +19,7 @@ class Menu extends Component {
 				<nav className="menu" role="navigation"
 					aria-label="Main menu">
 					<ul>
+						<li><Timer /></li>
 						<li><Link to="/" >Home</Link></li>
 						<li><Link to="/about">About</Link></li>
 						{!this.props.isLoggedIn && <li><Link to="/login">Login</Link></li>}
@@ -38,7 +40,8 @@ class Menu extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		isLoggedIn: state.auth.isLoggedIn
+		isLoggedIn: state.auth.isLoggedIn,
+		ttl: state.auth.ttl
 	}
 }
 

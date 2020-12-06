@@ -1,31 +1,36 @@
+import { getCookie } from '../commons/cookie';
 import { AuthService } from '../services/AuthService';
 import { actions } from './index';
+
+const dispatchError = (dispatch, errObj, action) => {
+  dispatch({
+    type: action
+  });
+
+  dispatch({
+    type: actions.setMessage,
+    payload: errObj
+  })
+}
 
 export const login = (loginJSON) => (dispatch) => {
   return new AuthService().login(loginJSON).then((data) => {
     if (data.error) {
-      console.log(data);
-      dispatch({
-        type: actions.loginFail
-      });
-      dispatch({
-        type: actions.setMessage,
-        payload: data
-      })
+      dispatchError(dispatch, data, actions.loginFail)
       return Promise.reject();
     }
-
+    const token = getCookie("token")
     dispatch({
       type: actions.loginSuccess,
-      payload: data.ttl
+      payload: {
+        token,
+        ttl: data.ttl
+      }
     });
 
     return Promise.resolve();
-  }).catch((error) => {
-    dispatch({
-      type: actions.loginFail,
-      payload: error
-    })
+  }).catch((error = { message: 'Check internet', error: true }) => {
+    dispatchError(dispatch, error, actions.loginFail)
     return Promise.reject();
   })
 }
@@ -33,18 +38,21 @@ export const login = (loginJSON) => (dispatch) => {
 export const signup = (signupJSON) => (dispatch) => {
   return new AuthService().signup(signupJSON).then((data) => {
     if (data.err) {
-      // showError(dispatch, data.err, actions.signupFail);
+      dispatchError(dispatch, data, actions.signupFail)
       return Promise.reject();
     }
-
+    const token = getCookie("token")
     dispatch({
-      type: actions.loginSuccess,
-      payload: data.ttl
+      type: actions.signupSuccess,
+      payload: {
+        token,
+        ttl: data.ttl
+      }
     });
 
     return Promise.resolve();
-  }).catch((err) => {
-    // showError(dispatch, err.message, actions.signupFail);
+  }).catch((err = { message: 'Check internet', error: true }) => {
+    dispatchError(dispatch, err, actions.signupFail)
     return Promise.reject();
   })
 }
@@ -52,16 +60,20 @@ export const signup = (signupJSON) => (dispatch) => {
 export const refresh = () => (dispatch) => {
   return new AuthService().refresh().then((data) => {
     if (data.err) {
-      // showError(dispatch, data.err, actions.refreshFail);
+      dispatchError(dispatch, data, actions.refreshFail)
       return Promise.reject();
     }
-
+    
+    const token = getCookie("token")
     dispatch({
       type: actions.refresh,
-      payload: data.ttl
+      payload: {
+        token,
+        ttl: data.ttl
+      }
     });
-  }).catch((err = "Connectivity error") => {
-    // showError(dispatch, err.message, actions.refreshFail);
+  }).catch((err = { message: 'Check internet', error: true }) => {
+    dispatchError(dispatch, err, actions.refreshFail)
     return Promise.reject();
   })
 }
@@ -73,8 +85,8 @@ export const logout = () => (dispatch) => {
     });
 
     return Promise.resolve();
-  }).catch((err) => {
-    // showError(dispatch, err.message, actions.logout);
+  }).catch((err= { message: 'Check internet', error: true }) => {
+    dispatchError(dispatch, err, actions.refreshFail)
     return Promise.reject();
   })
 }

@@ -1,4 +1,4 @@
-import actions from './index';
+import { actions } from './index';
 export const setMessage = (message) => ({
   type: actions.setMessage,
   payload: message

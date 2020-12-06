@@ -17,7 +17,8 @@ const iBudget = new mongoose.Schema({
     type: String
   },
   type: {
-    type: String
+    type: String,
+    required: true
   },
   description: {
     type: String

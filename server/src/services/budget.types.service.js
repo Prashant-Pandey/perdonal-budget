@@ -24,7 +24,6 @@ async function createBudgetType(userId, budgetTypeObj) {
 async function getBudgetTypeById(userId, budgetTypeId) {
   try {
     const budgetType = await User.findOne({ _id: userId, 'budgetTypes._id': budgetTypeId }, { 'budgetTypes.$': 1 });
-    console.log(budgetType, userId, budgetTypeId);
     return budgetType;
   } catch (error) {
     return errorHandler.internalServerError(error.message);
@@ -61,7 +60,6 @@ async function getBudgetTypesNature(data, startDate, endDate) {
 
 async function getBudgetTypesName(data, startMoney, endMoney) {
   const filterData = data.filter((val) => {
-    console.log(val.cost);
     return val.cost >= startMoney && val.cost <= endMoney;
   });
   return filterData;
@@ -111,7 +109,6 @@ async function deleteBudgetTypes(userId, budgetTypeId) {
 
     return budgetType;
   } catch (error) {
-    console.log(error.message);
     return errorHandler.internalServerError(error.message);
   }
 }

@@ -29,3 +29,12 @@ export function deleteCookie(cookiename) {
     return false;
   }
 }
+
+export function setCookie(cookiename, value, expTime) {
+  try {
+    document.cookie+=`;${cookiename}=${value};expires=${new Date(expTime)}`
+    return true;
+  } catch (error) {
+    return false;
+  }
+}

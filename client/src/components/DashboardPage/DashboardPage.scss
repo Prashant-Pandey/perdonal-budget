@@ -1,8 +1,19 @@
 .DashboardPage {
   min-height: 80vh;
   padding: 16px;
+  display: flex;
+  flex-direction: column;
 }
 
-.DashboardPage h1{
-  
+.monthly-stats{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.monthly-stats > *{
+  min-width: 45%;
+  margin: 16px 0;
 }

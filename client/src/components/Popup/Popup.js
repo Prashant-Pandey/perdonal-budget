@@ -4,50 +4,45 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import MuiGrid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import FormGroup from '@material-ui/core/FormGroup';
 import Button from '@material-ui/core/Button';
+import { connect } from "react-redux";
+import {actions} from '../../actions/index';
+import {refresh} from '../../actions/authAction'
 
-const Popup = ({
-  row,
-  onChange,
-  onApplyChanges,
-  onCancelChanges,
-  open,
-}) => (
-    <Dialog open={open} onClose={onCancelChanges} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">Employee Details</DialogTitle>
-      <DialogContent>
-        <MuiGrid container spacing={3}>
-          <MuiGrid item xs={6}>
-            <FormGroup>
-              <TextField
-                margin="normal"
-                name="title"
-                label="Title"
-                value={row.title || ''}
-                onChange={onChange}
-              />
-              <TextField
-                margin="normal"
-                name="description"
-                label="description"
-                value={row.description || ''}
-                onChange={onChange}
-              />
-            </FormGroup>
-          </MuiGrid>
+const Popup = (props) => (
+  <Dialog open={props.open} onClose={props.close} aria-labelledby="form-dialog-title">
+    <DialogTitle id="form-dialog-title">Login Session</DialogTitle>
+    <DialogContent>
+      <MuiGrid container spacing={3}>
+        <MuiGrid item xs={6}>
+          <p>Session is about to end, Do you wish to continue?</p>
         </MuiGrid>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onCancelChanges} color="primary">
-          Cancel
+      </MuiGrid>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={props.close} color="primary">
+        Cancel
       </Button>
-        <Button onClick={onApplyChanges} color="primary">
-          Save
+      <Button onClick={props.refreshToken} color="primary">
+        Save
       </Button>
-      </DialogActions>
-    </Dialog>
-  );
-
-export default Popup;
+    </DialogActions>
+  </Dialog>
+);
+const mapStateToProps = (state) => {
+  return {
+    open: state.auth.popup
+  }
+}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    close: () => {
+      dispatch({type: actions.closePopup})
+    },
+    refreshToken: () => {
+      dispatch(refresh())
+      dispatch({type: actions.closePopup})
+    }
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Popup);

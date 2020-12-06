@@ -8,13 +8,19 @@ export const actions = {
   logout: 'LOGOUT_USER',
   refresh: 'REFRESH_TOKEN',
   refreshFail: 'REFRESH_TOKEN_FAIL',
-  changeRefresh: 'REFRESH_TOKEN_CHANGE',
+  decreaseTTL: 'TOKEN_TIME_DECREASE',
+  openPopup: 'OPEN_POPUP',
+  closePopup: 'CLOSE_POPUP',
 
   setMessage: 'SET_MESSAGE',
   clearMessage: 'CLEAR MESSAGE',
 
   getBudgetsBetweenTwoDate: 'GET_BUDGETS_BETWEEN_TWO_DATES',
   getBudgetsBetweenTwoDateFailed: 'GET_BUDGETS_BETWEEN_TWO_DATES_FAILED',
+
+
+  getAllBudgets: 'GET_ALL_BUDGETS',
+  getAllBudgetsFailed: 'GET_ALL_BUDGETS_FAILED',
   createBudget: 'CREATE_BUDGET',
   createBudgetFailed: 'CREATE_BUDGET_FAILED',
   updateBudget: 'UPDATE_BUDGET',

@@ -18,13 +18,14 @@ import { Snackbar, IconButton, Button, TextField } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import MuiAlert from '@material-ui/lab/Alert';
 import { createBudget, deleteBudget, updateBudget } from '../../actions/budgetAction';
-import UpdateCommand from './UpdateCommand';
+import { setMessage } from '../../actions/messageAction'
 
 
 function CRUDBudgets(props) {
   const columns = [
     { name: 'title', title: 'Title' },
     { name: 'description', title: 'Description' },
+    { name: 'type', title: 'Type' },
     { name: 'cost', title: 'Cost' },
     { name: 'date', title: 'Date' }
   ];
@@ -43,7 +44,8 @@ function CRUDBudgets(props) {
     return !cost || typeof +cost !== 'number' || cost < 0;
   }
 
-  const validateDate = (date) => {  const tmp = new Date(date);
+  const validateDate = (date) => {
+    const tmp = new Date(date);
     return !tmp || tmp == 'Invalid Date' || tmp === new Date(0, 0, 0, 0);
   }
 
@@ -78,7 +80,7 @@ function CRUDBudgets(props) {
         showMessageToast('error', 'Please Validate Cost');
         return false;
       }
-      if (budgetData.date &&validateDate(budgetData.date)) {
+      if (budgetData.date && validateDate(budgetData.date)) {
         showMessageToast('error', 'Please Validate the date');
         return false;
       }
@@ -99,15 +101,18 @@ function CRUDBudgets(props) {
   };
 
   const showMessageToast = (type, txt) => {
-    setShowMessage(true);
     if (type === 'error') {
-      setError(txt);
-      setSuccess('');
+      props.dispatch(setMessage({
+        message: txt,
+        error: true
+      }))
     }
 
     if (type === 'success') {
-      setError('');
-      setSuccess(txt);
+      props.dispatch(setMessage({
+        message: txt,
+        success: true
+      }))
     }
   }
 
