@@ -1,9 +1,9 @@
 import { Button, TextField } from "@material-ui/core";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/date-fns";
+// import {
+//   MuiPickersUtilsProvider,
+//   KeyboardDatePicker,
+// } from "@material-ui/pickers";
+// import DateFnsUtils from "@date-io/date-fns";
 import React, {useState} from "react";
 
 const UpdateCommand = (props) => {
@@ -24,7 +24,7 @@ const UpdateCommand = (props) => {
       <TextField error={true} type="text" label="Title" name="title" />
       <TextField error={true} type="text" label="Title" name="title" />
       <TextField error={true} type="text" label="Title" name="title" />
-      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+      {/* <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <KeyboardDatePicker
           disableToolbar
           variant="inline"
@@ -38,7 +38,7 @@ const UpdateCommand = (props) => {
             "aria-label": "change date",
           }}
         />
-      </MuiPickersUtilsProvider>
+      </MuiPickersUtilsProvider> */}
     </div>
   );
 };
