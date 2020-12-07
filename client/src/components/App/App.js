@@ -11,7 +11,7 @@ import HomePage from '../HomePage/HomePage';
 import Footer from '../Footer/Footer';
 import './App.scss';
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import AboutPage from '../AboutPage/AboutPage';
+import AboutPage from '../AboutPage/AboutPage.jsx';
 import LoginPage from '../LoginPage/LoginPage';
 import SignupPage from '../SignupPage/SignupPage';
 import DashboardPage from "../DashboardPage/DashboardPage";
@@ -22,12 +22,6 @@ import { actions } from '../../actions';
 import { refresh } from '../../actions/authAction';
 
 function App(props) {
-
-  useEffect(() => {
-    if (props.token && props.token !== '') {
-      props.refreshToken();
-    }
-  }, [])
 
   return (
     <Router>

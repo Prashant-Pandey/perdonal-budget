@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import CRUDBudgets from '../Budgets/CRUDBudgets';
+import CRUDBudgets from '../Budgets/CRUDBudgets.jsx';
 import './DashboardPage.scss';
 import { connect } from 'react-redux';
 import { getBudgetTypes } from '../../actions/budgetTypeAction';
@@ -7,12 +7,10 @@ import { getAllBudgets } from '../../actions/budgetAction';
 import GoalSpendingChart from "../GoalSpendingChart/GoalSpendingChart";
 import MonthlySpendingChart from "../MonthlySpendingChart/MonthlySpendingChart";
 import { actions } from '../../actions';
-import { logout } from "../../actions/authAction"
+import { logout, refresh } from "../../actions/authAction"
 
 function DashboardPage(props) {
-
-	const didMountRef = useRef(false)
-
+	let refreshedOnce = false;
 	const formatDate = (dateObj) => {
 		return dateObj.getFullYear() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getDate();
 	}
@@ -24,10 +22,6 @@ function DashboardPage(props) {
 		let interval;
 		if (props.ttl > 0) {
 			interval = setInterval(() => {
-				// if (props.ttl == 5995) {
-				// 	props.dispatch({ type: actions.openPopup });
-				// }
-
 				if (props.ttl <= 0) {
 					clearTimeout(interval);
 					props.dispatch(logout())
@@ -46,28 +40,31 @@ function DashboardPage(props) {
 
 	useEffect(() => {
 		let interval;
-		if (didMountRef.current) {
-			if (props.ttl > 0) {
-				interval = setInterval(() => {
-					// if (props.ttl == 5995) {
-					// 	props.dispatch({ type: actions.openPopup });
-					// }
+		if (props.ttl > 0 ) {
+			interval = setInterval(() => {
 
-					if (props.ttl <= 0) {
-						clearTimeout(interval);
-						props.dispatch(logout())
-					}
+				if (props.ttl <= 0) {
+					clearTimeout(interval);
+					props.dispatch(logout())
+				}
 
-					props.dispatch({ type: actions.decreaseTTL })
-				}, 1000)
+				props.dispatch({ type: actions.decreaseTTL })
+			}, 1000)
+		}else{
+			if(!refreshedOnce){
+				props.dispatch(refresh());
+				refreshedOnce = true;
 			}
-		} else didMountRef.current = true
+			
+		}
+
 		return () => {
 			if (interval) {
 				clearInterval(interval);
 			}
 		}
-	})
+	});
+
 	return (
 		<div className="DashboardPage">
 			<h1>Dashboard</h1>

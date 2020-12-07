@@ -1,16 +1,40 @@
+.AboutPage{
+    position: relative;
+    min-height: 60vh;
+    
+}
+.diagonal-line{
+    background-color: #B4C6F0;
+    height: 20px;
+    width: 100%;
+    transform: skew(0, 1deg);
+}
+
+.background-cover{
+    position: absolute;
+    top:-13px;
+    left: 0;
+    width: 100%;
+    background-color: #B4C6F0;
+    height: 20px;
+    transform: skew(0, 1deg);
+}
 .page-area {
     display: flex;
-    flex-wrap: wrap;
-    flex-direction: column;
-    align-items: center;
-}
-
-.page-row{
-    display: flex;
-    flex-wrap: wrap;
     flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    height: 100%;
+    width: 100%;
+    min-height: 55vh;
 }
 
+.page-col{
+    display: flex;
+    flex-direction: column;
+    padding-top: 4%;
+}
 .container article.text-box {
     display: flex;
     flex-direction: column;

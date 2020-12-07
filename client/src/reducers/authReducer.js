@@ -42,7 +42,6 @@ const authReducer = (state = initState, action) => {
             token = state.token,
             popup = state.popup;
          if (state.ttl <= 0) {
-            console.log(';;; from reducer;;; ', state.ttl);
             deleteCookie("token");
             isLoggedIn = false;
             userCancelled = false;
@@ -51,7 +50,7 @@ const authReducer = (state = initState, action) => {
             popup = false;
          }
 
-         if (state.ttl <= 59900 && !state.userCancelled) {
+         if (state.ttl <= 30000 && !state.userCancelled) {
             popup = true;
          }
          return {

@@ -1,8 +1,9 @@
 const router = require('express').Router();
-const jwt = require('jsonwebtoken');
+const jwtMW = require("../middlewares/auth.middleware")
 const authService = require('../services/auth.services');
 const UserObject = require('../models/User').UserObject;
 const { body, validationResult } = require('express-validator');
+const jwt = require("jsonwebtoken");
 
 router.get('/', (req, res) => {
   res.json({ one: 'one' });
@@ -102,27 +103,11 @@ router.post('/signup', [
   return res.json({ success: true, ttl, err: null });
 });
 
-router.post('/refresh', (req, res) => {
-  if (!req.headers.authorization) {
-    return res.status(400).json({ success: false, err: 'not authorized' });
-  }
+router.post('/refresh', jwtMW, (req, res) => {
   const authToken = req.headers.authorization.split(' ')[1];
-  console.log(req.headers.authorization);
-  if (authToken === '' ||
-    authToken === 'null' || !jwt.verify(authToken, process.env.AUTH_SECRET)) {
-    return res.status(400).json({ success: false, err: 'invalid token' });
-  }
-  const decodedToken = jwt.decode(authToken);
-  if (decodedToken.exp < Date.now() / 1000) {
-    res.status(401).json({
-      success: false,
-      err: 'Token Already Expired'
-    });
-    return;
-  }
   // valid response
   res.cookie('token', authToken, {
-    maxAge: 6000
+    maxAge: 60000
   });
   return res.json({ success: true, ttl: 60000, err: null });
 });

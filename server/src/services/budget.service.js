@@ -17,8 +17,6 @@ async function createBudget(userId, budgetObject) {
       _id: userId,
       'budgets.title': budgetObject.title
     }, { 'budgets.$': 1 });
-    // 'budgets.title': budgetObject.title, 'budgets.type': budgetObject.type, 'budgets.date': budgetObject.date
-    console.log(budget, ';;;;;;;; budgets');
     return budget[0].budgets[0];
   } catch (error) {
     return errorHandler.internalServerError(error.message);
@@ -104,7 +102,6 @@ async function deleteBudget(userId, budgetId) {
 
     return budget;
   } catch (error) {
-    console.log(error.message);
     return errorHandler.internalServerError(error.message);
   }
 }

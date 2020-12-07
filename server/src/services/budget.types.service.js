@@ -35,7 +35,6 @@ async function getAllBudgetTypes(userId) {
     const userBudgetData = await (await User.findOne({ _id: userId }, { _id: 0, budgetTypes: 1 })).get('budgetTypes');
     return userBudgetData;
   } catch (error) {
-    console.log(error);
     return errorHandler.internalServerError(error.message);
   }
 }
@@ -90,7 +89,6 @@ async function updateBudgetType(userId, budgetTypeId, budgetTypeObj) {
 
     return budgetType;
   } catch (error) {
-    console.log(error.message);
     return errorHandler.internalServerError(error.message);
   }
 }
