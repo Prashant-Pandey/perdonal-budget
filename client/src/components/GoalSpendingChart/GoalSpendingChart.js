@@ -1,39 +1,50 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
 import {
   Chart,
   ArgumentAxis,
   ValueAxis,
   BarSeries,
-  Legend, 
+  Legend,
 } from '@devexpress/dx-react-chart-material-ui';
 
 import { Stack } from '@devexpress/dx-react-chart';
 
 const stacks = [
-  { series: ['👶 Spending', '🧑 Goal'] },
+  { series: ['Spending', 'Goal'] },
 ];
 
 const GoalSpendingChart = props => {
+  let budgetData = {}
+  if (props.budgets) {
+    const types = {};
+    props.types.forEach((type) => {
+      types[type["name"]] = type["goal"];
+    });
+    budgetData = props.budgets.forEach((budget) => {
+      budget['goal'] = types[budget["type"]];
+      return budget;
+    });
+  }
   return (
     <div>
       <h1>Goal Spending Chart</h1>
       <Paper>
         <Chart
-          data={props.budgetData}
+          data={budgetData}
         >
           <ArgumentAxis />
           <ValueAxis />
 
           <BarSeries
-            name="👶 Cost"
+            name="Cost"
             valueField="cost"
             argumentField="title"
           />
           <BarSeries
-            name="🧑 Goal"
-            valueField="cost"
+            name="Goal"
+            valueField="goal"
             argumentField="title"
           />
           <Stack
@@ -48,7 +59,8 @@ const GoalSpendingChart = props => {
 
 const mapStateToProps = (state) => {
   return {
-    budgetData: state.budget.budgets
+    budgets: state.budget.budgets,
+    types: state.types.budgetTypes
   }
 }
 

@@ -35,6 +35,7 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   const userId = req.user_id;
   const budgetObject = req.body;
+  console.log(budgetObject);
   const budget = await budgetService.createBudget(userId, budgetObject);
   if (budget.err) {
     return res.status(budget.err.status).send({

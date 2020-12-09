@@ -57,70 +57,71 @@ function CRUDBudgets(props) {
     return !tmp || tmp == "Invalid Date" || tmp === new Date(0, 0, 0, 0);
   };
 
-  const commitChanges = ({ added, changed, deleted }) => {
+  const commitChanges = ({added, changed, deleted}) => {
     console.log(added, changed, deleted);
-    // if (added) {
-    //   const budgetData = added[0];
-    //   if (
-    //     validateString(budgetData.title) ||
-    //     validateString(budgetData.description) ||
-    //     validateCost(budgetData.cost) ||
-    //     validateDate(budgetData.date)
-    //   ) {
-    //     showMessageToast("error", "Please validate inputs");
-    //     return false;
-    //   }
-    //   props
-    //     .dispatch(createBudget(budgetData))
-    //     .then(() => {
-    //       showMessageToast("success", "Added Successfully");
-    //     })
-    //     .catch((e = "Check your connection") => {
-    //       showMessageToast("error", `${e}`);
-    //     });
-    // }
-    // if (changed) {
-    //   const key = Object.keys(changed)[0];
-    //   const budgetData = changed[key];
-    //   if (!budgetData) {
-    //     return false;
-    //   }
-    //   if (budgetData.title && validateString(budgetData.title)) {
-    //     showMessageToast("error", "Please Validate Title");
-    //     return false;
-    //   }
-    //   if (budgetData.description && validateString(budgetData.description)) {
-    //     showMessageToast("error", "Please Validate Description");
-    //     return false;
-    //   }
-    //   if (budgetData.cost && validateCost(budgetData.cost)) {
-    //     showMessageToast("error", "Please Validate Cost");
-    //     return false;
-    //   }
-    //   if (budgetData.date && validateDate(budgetData.date)) {
-    //     showMessageToast("error", "Please Validate the date");
-    //     return false;
-    //   }
+    if (added) {
+      const budgetData = added[0];
+      console.log(budgetData);
+      if (
+        validateString(budgetData.title) ||
+        // validateString(budgetData.description) ||
+        validateCost(budgetData.cost) ||
+        validateDate(budgetData.date)
+      ) {
+        showMessageToast("error", "Please validate inputs");
+        return false;
+      }
+      props
+        .dispatch(createBudget(budgetData))
+        .then(() => {
+          showMessageToast("success", "Added Successfully");
+        })
+        .catch((e = "Check your connection") => {
+          showMessageToast("error", `${e}`);
+        });
+    }
+    if (changed) {
+      const key = Object.keys(changed)[0];
+      const budgetData = changed[key];
+      if (!budgetData) {
+        return false;
+      }
+      if (budgetData.title && validateString(budgetData.title)) {
+        showMessageToast("error", "Please Validate Title");
+        return false;
+      }
+      if (budgetData.description && validateString(budgetData.description)) {
+        showMessageToast("error", "Please Validate Description");
+        return false;
+      }
+      if (budgetData.cost && validateCost(budgetData.cost)) {
+        showMessageToast("error", "Please Validate Cost");
+        return false;
+      }
+      if (budgetData.date && validateDate(budgetData.date)) {
+        showMessageToast("error", "Please Validate the date");
+        return false;
+      }
 
-    //   props
-    //     .dispatch(updateBudget(key, budgetData))
-    //     .then(() => {
-    //       showMessageToast("success", "Updated Successfully");
-    //     })
-    //     .catch((e = "Check your connection") => {
-    //       showMessageToast("error", `${e}`);
-    //     });
-    // }
-    // if (deleted) {
-    //   props
-    //     .dispatch(deleteBudget(deleted[0]))
-    //     .then(() => {
-    //       showMessageToast("success", "Deleted Successfully");
-    //     })
-    //     .catch((e = "Check your connection") => {
-    //       showMessageToast("error", `${e}`);
-    //     });
-    // }
+      props
+        .dispatch(updateBudget(key, budgetData))
+        .then(() => {
+          showMessageToast("success", "Updated Successfully");
+        })
+        .catch((e = "Check your connection") => {
+          showMessageToast("error", `${e}`);
+        });
+    }
+    if (deleted) {
+      props
+        .dispatch(deleteBudget(deleted[0]))
+        .then(() => {
+          showMessageToast("success", "Deleted Successfully");
+        })
+        .catch((e = "Check your connection") => {
+          showMessageToast("error", `${e}`);
+        });
+    }
   };
 
   const showMessageToast = (type, txt) => {
@@ -239,6 +240,8 @@ function CRUDBudgets(props) {
           <TableHeaderRow />
           {/* showSortingControls */}
           {/* <TableEditRow /> */}
+          {/* {title: "aS", description: "ASA", type: "Expenses", startDate: "2020-12-23", cost: "232"} */}
+          {/* {title: "ZxZx", description: "zxzx", type: "Asxs", cost: "232", date: "2020-02-10"} */}
           <TableEditColumn showAddCommand showEditCommand showDeleteCommand />
           <EditPlugin />
           {/* <PagingPanel /> */}

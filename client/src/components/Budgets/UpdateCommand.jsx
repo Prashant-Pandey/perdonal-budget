@@ -11,33 +11,42 @@ import {
   DialogContent,
   DialogTitle
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { connect } from "react-redux";
 
 const UpdateCommand = (props) => {
-  // console.log(props);
-  const [title, setTitle] = useState(props.row.title || "");
-  const [description, setDescription] = useState(props.row.description || "");
-  const [type, setType] = useState(props.row.type || "");
-  const [cost, setCost] = useState(props.row.cost || "");
-  const [date, setDate] = useState(
-    props.row.date || new Date(Date.now()).toISOString().split("T")[0]
-  );
+  // console.log(props.row);
+  // const [title, setTitle] = useState(props.row.title || "");
+  // const [description, setDescription] = useState(props.row.description || "");
+  // const [type, setType] = useState(props.row.type || "");
+  // const [cost, setCost] = useState(props.row.cost || "");
+  // const [date, setDate] = useState(
+  //   props.row.date || new Date(Date.now()).toISOString().split("T")[0]
+  // );
 
   const [titleError, setTitleError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [typeError, setTypeError] = useState("");
   const [costError, setCostError] = useState("");
 
+  // const setAllValues = async () =>{
+  //   props.onChange({target:{name:'title', value:title}});
+  //   props.onChange({target:{name:'description', value:description}});
+  //   props.onChange({target:{name:'type', value:type}});
+  //   props.onChange({target:{name:'cost', value:cost}});
+  //   props.onChange({target:{name:'date', value:date}});
+  // };
+  
   const handleTitleChange = (e) => {
-    setTitle(e.target.value);
+    // setTitle(e.target.value);
+    props.onChange(e);
   };
 
   const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
+    props.onChange(e);
   };
   const handleTypeChange = (e) => {
-    setType(e.target.value);
+    props.onChange(e);
   };
   const handleCostChange = (e) => {
     const val = e.target.value;
@@ -45,25 +54,16 @@ const UpdateCommand = (props) => {
       setCostError("Please enter valid number.");
       return;
     }
-    setCost(val);
+    props.onChange(e);
     setCostError("");
   };
 
   const handleDateChange = (e) => {
-    setDate(e.target.value);
+    props.onChange(e);
   };
 
-  const submitRowForm = (e) => {
-    // e.preventDefaukt
-    if (title === '' || type === '' || cost === '') {
-      setTitleError(title === '' ? 'Title cannot be empty' : '');
-      // setDescriptionError(description===''?'Description cannot be empty')
-      setCostError(cost === '' ? 'Transaction must involve a cost' : '');
-      return;
-    }
-
-    props.onApplyChanges({ title, description, cost, type, date }, true);
-
+  const submitRowForm = async (e) => {
+    props.onApplyChanges();
   };
 
   const cancelRowForm = (e) => {
@@ -92,8 +92,8 @@ const UpdateCommand = (props) => {
           error={titleError !== ""}
           type="text"
           label="Title"
+          defaultValue={props.row.title}
           name="title"
-          value={title}
           onChange={handleTitleChange}
         />
         <TextField
@@ -101,7 +101,7 @@ const UpdateCommand = (props) => {
           type="text"
           label="Description"
           name="description"
-          value={description}
+          defaultValue={props.row.description}
           onChange={handleDescriptionChange}
         />
         <FormControl>
@@ -109,8 +109,8 @@ const UpdateCommand = (props) => {
           <Select
             labelId="typeLabel"
             id="type"
-            value={type}
-            defaultValue={defaultSelectValue}
+            name="type"
+            defaultValue={props.row.type}
             onChange={handleTypeChange}
           >
             {typesMapping}
@@ -122,15 +122,15 @@ const UpdateCommand = (props) => {
           type="number"
           label="Cost"
           name="cost"
-          value={cost}
+          defaultValue={props.row.cost}
           onChange={handleCostChange}
         />
         <TextField
-          id="startDate"
-          name="startDate"
+          id="date"
+          name="date"
           label="Start Date"
           type="date"
-          defaultValue={date}
+          defaultValue={props.row.date}
           InputLabelProps={{
             shrink: true,
           }}
@@ -150,7 +150,7 @@ const UpdateCommand = (props) => {
           type="submit"
           variant="contained"
           color="primary"
-          onClick={props.onApplyChanges}
+          onClick={submitRowForm}
         >
           {props.row.title ? "Save" : "Add"}
         </Button>
