@@ -4,6 +4,7 @@ const authService = require('../services/auth.services');
 const UserObject = require('../models/User').UserObject;
 const { body, validationResult } = require('express-validator');
 const jwt = require("jsonwebtoken");
+const tokenTTL = 60000*60;
 
 router.get('/', (req, res) => {
   res.json({ one: 'one' });
@@ -11,7 +12,7 @@ router.get('/', (req, res) => {
 
 function generateAndSendToken(authRes) {
   // generating cookie for saving token
-  const ttl = 60000;
+  const ttl = tokenTTL;
   const tokenObj = {
     id: authRes._id,
     email: authRes.email,
@@ -107,9 +108,9 @@ router.post('/refresh', jwtMW, (req, res) => {
   const authToken = req.headers.authorization.split(' ')[1];
   // valid response
   res.cookie('token', authToken, {
-    maxAge: 60000
+    maxAge: tokenTTL
   });
-  return res.json({ success: true, ttl: 60000, err: null });
+  return res.json({ success: true, ttl: tokenTTL, err: null });
 });
 
 module.exports = router;

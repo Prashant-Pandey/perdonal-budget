@@ -25,8 +25,10 @@ import {
   deleteBudget,
   updateBudget,
 } from "../../actions/budgetAction";
-import UpdateCommand from './UpdateComponent.jsx'
+import UpdateCommand from "./UpdateComponent.jsx";
+import EditPlugin from "./EditPlugin";
 import { setMessage } from "../../actions/messageAction";
+import "./UpdateComponent.scss";
 
 function CRUDBudgets(props) {
   const columns = [
@@ -155,35 +157,40 @@ function CRUDBudgets(props) {
   const [columnEditingRules] = useState([
     {
       columnName: "title",
-      createRowChange: (row, value) =>{
-        return ({
+      createRowChange: (row, value) => {
+        return {
           ...row,
           title: value,
-        })
+        };
       },
     },
     {
       columnName: "describe",
       createRowChange: (row, value) => {
-        return ({
+        return {
           ...row,
           describe: value,
-        })
+        };
       },
     },
     {
       columnName: "cost",
       createRowChange: (row, value) => {
-        if(isNaN(parseInt(value))){
-          props.dispatch(setMessage({error: true, message: "Cost other than number not allowed"}))
+        if (isNaN(parseInt(value))) {
+          props.dispatch(
+            setMessage({
+              error: true,
+              message: "Cost other than number not allowed",
+            })
+          );
           return {
-            ...row
-          }
+            ...row,
+          };
         }
-        return ({
+        return {
           ...row,
-          cost: value
-        })
+          cost: value,
+        };
       },
     },
   ]);
@@ -215,8 +222,10 @@ function CRUDBudgets(props) {
           columns={columns}
           getRowId={(row) => row._id}
         >
+          
+          {/* <UpdateCommand /> */}
           <EditingState
-            columnExtensions={columnEditingRules}
+            // columnExtensions={columnEditingRules}
             onCommitChanges={commitChanges}
           />
           <PagingState defaultPageSize={10} />
@@ -227,7 +236,8 @@ function CRUDBudgets(props) {
           <IntegratedSorting />
           <Table />
           <TableHeaderRow showSortingControls />
-          <TableEditRow rowComponent={UpdateCommand} />
+          <TableEditRow />
+          <EditPlugin />
           <TableEditColumn showAddCommand showEditCommand showDeleteCommand />
           <PagingPanel />
         </Grid>
