@@ -25,8 +25,8 @@ import {
   deleteBudget,
   updateBudget,
 } from "../../actions/budgetAction";
-// import UpdateCommand from "./UpdateComponent.jsx";
-import EditPlugin from "./EditPlugin";
+import UpdateCommand from './UpdateCommand.jsx';
+import EditPlugin from "../EditPlugin/EditPlugin.jsx";
 import { setMessage } from "../../actions/messageAction";
 import "./UpdateComponent.scss";
 
@@ -150,12 +150,6 @@ function CRUDBudgets(props) {
     setSuccess("");
   };
 
-  // { name: 'title', title: 'Title' },
-  //   { name: 'description', title: 'Description' },
-  //   { name: 'type', title: 'Type' },
-  //   { name: 'cost', title: 'Cost' },
-  //   { name: 'date', title: 'Date' }
-
   const [columnEditingRules] = useState([
     {
       columnName: "title",
@@ -230,21 +224,17 @@ function CRUDBudgets(props) {
             // columnExtensions={columnEditingRules}
             onCommitChanges={commitChanges}
           />
-          {/* <PagingState defaultPageSize={10} />
+          <PagingState defaultPageSize={10} />
           <IntegratedPaging />
           <SortingState
             defaultSorting={[{ columnName: "city", direction: "asc" }]}
           />
-          <IntegratedSorting /> */}
+          <IntegratedSorting />
           <Table />
           <TableHeaderRow />
-          {/* showSortingControls */}
-          {/* <TableEditRow /> */}
-          {/* {title: "aS", description: "ASA", type: "Expenses", startDate: "2020-12-23", cost: "232"} */}
-          {/* {title: "ZxZx", description: "zxzx", type: "Asxs", cost: "232", date: "2020-02-10"} */}
           <TableEditColumn showAddCommand showEditCommand showDeleteCommand />
-          <EditPlugin />
-          {/* <PagingPanel /> */}
+          <EditPlugin EditComponent={UpdateCommand}/>
+          <PagingPanel />
         </Grid>
       </Paper>
     </>

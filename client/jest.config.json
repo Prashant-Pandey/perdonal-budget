@@ -1,6 +1,17 @@
 {
   "name": "kharcha",
   "jest": {
-    "verbose": true
+    "verbose": true,
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "jsx"
+    ],
+    "setupFiles": [
+      "./src/setupTests.js"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|jpg|png)$": "<rootDir>/empty-module.js"
+    }
   }
 }

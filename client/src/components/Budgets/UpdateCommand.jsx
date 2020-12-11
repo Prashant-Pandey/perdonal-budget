@@ -1,7 +1,6 @@
 import {
   Button,
   TextField,
-  ButtonGroup,
   InputLabel,
   MenuItem,
   Select,
@@ -11,32 +10,18 @@ import {
   DialogContent,
   DialogTitle
 } from "@material-ui/core";
-import React, { useState, useCallback } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
 const UpdateCommand = (props) => {
-  // console.log(props.row);
-  // const [title, setTitle] = useState(props.row.title || "");
-  // const [description, setDescription] = useState(props.row.description || "");
-  // const [type, setType] = useState(props.row.type || "");
-  // const [cost, setCost] = useState(props.row.cost || "");
-  // const [date, setDate] = useState(
-  //   props.row.date || new Date(Date.now()).toISOString().split("T")[0]
-  // );
 
   const [titleError, setTitleError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [typeError, setTypeError] = useState("");
   const [costError, setCostError] = useState("");
 
-  // const setAllValues = async () =>{
-  //   props.onChange({target:{name:'title', value:title}});
-  //   props.onChange({target:{name:'description', value:description}});
-  //   props.onChange({target:{name:'type', value:type}});
-  //   props.onChange({target:{name:'cost', value:cost}});
-  //   props.onChange({target:{name:'date', value:date}});
-  // };
-  
+
   const handleTitleChange = (e) => {
     // setTitle(e.target.value);
     props.onChange(e);
@@ -50,7 +35,7 @@ const UpdateCommand = (props) => {
   };
   const handleCostChange = (e) => {
     const val = e.target.value;
-    if (val != "" && `${val}`.match(/[A-Z,a-z]/)) {
+    if (val !== "" && `${val}`.match(/[A-Z,a-z]/)) {
       setCostError("Please enter valid number.");
       return;
     }
@@ -77,16 +62,33 @@ const UpdateCommand = (props) => {
     </MenuItem>
   ));
 
-  if (!props.open) {
-    return ('');
+  if (props.open && props.types.length === 0) {
+    return (
+      <Dialog open={props.open} onClose={cancelRowForm}
+        aria-labelledby="Create Transaction type before adding any transaction"
+        aria-describedby="Please add type of transactions by going to settings">
+        <DialogTitle id="form-dialog-title">Create Types before adding transactions</DialogTitle>
+        <DialogContent className="addOrChangeElem">
+          <p>Please add type of transactions by going to <Link title="Go to settings" to="/settings">settings</Link></p>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            type="submit"
+            variant="contained"
+            color="secondary"
+            onClick={cancelRowForm}
+          >
+            OKAY
+        </Button>
+        </DialogActions>
+      </Dialog>);
   }
 
-  const defaultSelectValue = props.types[0].name;
-  // console.log(defaultSelectValue);
-  {/* <h1>Please Create Budget Type before creating budget</h1> */ }
   return (
-    <Dialog open={props.open} onClose={cancelRowForm} aria-labelledby="form-dialog-title">
-      <DialogTitle id="form-dialog-title">Employee Details</DialogTitle>
+    <Dialog open={props.open} onClose={cancelRowForm} 
+    aria-labelledby="Input Transaction Data"
+    aria-describedby="Add or update the transaction data">
+      <DialogTitle id="form-dialog-title">Enter Transaction</DialogTitle>
       <DialogContent className="addOrChangeElem">
         <TextField
           error={titleError !== ""}

@@ -1,6 +1,7 @@
 export function getCookie(cookiename) {
   try {
     var cookies = RegExp(cookiename + "=[^;]+").exec(document.cookie).toString().split("=");
+    console.log(cookies);
     const value = cookies[cookies.indexOf(cookiename) + 1];
     return decodeURIComponent(value);
   } catch (error) {
@@ -18,21 +19,12 @@ export function deleteCookie(cookiename) {
     let cookieStr = cookies[0];
     for (let i = 1; i < cookies.length; i++) {
       if (i % 2 == 0) {
-        cookieStr+=';'+cookies[i];
+        cookieStr += ';' + cookies[i];
       } else {
-        cookieStr+='='+cookies[i];
+        cookieStr += '=' + cookies[i];
       }
     }
     document.cookie = cookieStr;
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
-
-export function setCookie(cookiename, value, expTime) {
-  try {
-    document.cookie+=`;${cookiename}=${value};expires=${new Date(expTime)}`
     return true;
   } catch (error) {
     return false;

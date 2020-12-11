@@ -69,13 +69,12 @@ function DashboardPage(props) {
 		<div className="DashboardPage">
 			<h1>Dashboard</h1>
 			<div className="monthly-stats">
-				{/* <GoalSpendingChart /> */}
+				<GoalSpendingChart />
 				<MonthlySpendingChart />
 			</div>
 			<div className="transactions-area">
 				<CRUDBudgets />
 			</div>
-			{/* <CreateBudget/> */}
 		</div>
 	)
 }

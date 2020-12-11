@@ -5,29 +5,30 @@ import {
   Chart,
   PieSeries,
   Tooltip,
+  Legend,
+  Title
 } from '@devexpress/dx-react-chart-material-ui';
 import { HoverState, EventTracker } from '@devexpress/dx-react-chart';
 
 const MonthlySpendingChart = props => {
   return (
-    <div>
-      <h1>Monthly Spending Chart</h1>
       <Paper>
         <Chart
           data={props.budgets}>
-            
           <PieSeries
             valueField="cost"
             argumentField="title"
           />
-          
+
           <EventTracker />
           <HoverState />
           <Tooltip />
-          
+
+          <Legend />
+          <Title text="Monthly Spending Chart" />
+
         </Chart>
       </Paper>
-    </div>
   );
 };
 

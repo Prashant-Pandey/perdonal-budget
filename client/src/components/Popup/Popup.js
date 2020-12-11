@@ -10,8 +10,10 @@ import {actions} from '../../actions/index';
 import {refresh} from '../../actions/authAction'
 
 const Popup = (props) => (
-  <Dialog open={props.open} onClose={props.close} aria-labelledby="form-dialog-title">
-    <DialogTitle id="form-dialog-title">Login Session</DialogTitle>
+  <Dialog open={props.open} onClose={props.close} 
+  aria-labelledby="Continue Login Session"
+  aria-describedby="Click Refresh to continue to log in, press cancel of leave it, it'll logout automatically due to inactivity">
+    <DialogTitle id="form-dialog-title">Continue Login Session</DialogTitle>
     <DialogContent>
       <MuiGrid container spacing={3}>
         <MuiGrid item xs={6}>
@@ -24,7 +26,7 @@ const Popup = (props) => (
         Cancel
       </Button>
       <Button onClick={props.refreshToken} color="primary">
-        Save
+        Continue session
       </Button>
     </DialogActions>
   </Dialog>

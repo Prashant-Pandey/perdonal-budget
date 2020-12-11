@@ -12,11 +12,19 @@ import { connect } from 'react-redux';
 import { Snackbar, IconButton } from '@material-ui/core';
 import { Close } from '@material-ui/icons';
 import MuiAlert from '@material-ui/lab/Alert';
+import EditPlugin from '../EditPlugin/EditPlugin';
+import UpdateCommand from './UpdateCommand.jsx';
 import { getBudgetTypes, createBudgetTypes, updateBudgetType, deleteBudgetTypes } from '../../actions/budgetTypeAction'
 
 
 function CRUDBudgetType(props) {
   const columns = [{ name: 'name', title: 'Name' }, { name: 'goal', title: 'Goal' }];
+
+  useEffect(()=>{
+    if(props.budgetTypes.length===0){
+      props.dispatch(getBudgetTypes());
+    }
+  }, [])
 
   const [showMessage, setShowMessage] = useState(false);
 
@@ -123,12 +131,12 @@ function CRUDBudgetType(props) {
           />
           <Table />
           <TableHeaderRow />
-          <TableEditRow />
           <TableEditColumn
             showAddCommand
             showEditCommand
             showDeleteCommand
           />
+          <EditPlugin EditComponent={UpdateCommand} />
         </Grid>
       </Paper>
     </>

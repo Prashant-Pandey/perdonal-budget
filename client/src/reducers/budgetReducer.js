@@ -48,6 +48,19 @@ const budgetReducer = (state = initState, action) => {
             ...state,
             budgets: filteredBudgets
          };
+      case actions.getBudgetTypeSumData:
+         const budgetSum = {};
+         state.budgets.forEach(budget => {
+            if (budgetSum[budget["type"]]) {
+              budgetSum[budget["type"]] += budget["cost"]
+            } else {
+              budgetSum[budget["type"]] = budget["cost"]
+            }
+          });
+         return {
+            ...state,
+            budgetSum
+         }
       default:
          return state;
    }

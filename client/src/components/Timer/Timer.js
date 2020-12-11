@@ -7,7 +7,7 @@ class Timer extends React.Component {
   
   render() {
     return (
-      <span>Timer: {this.props.ttl}</span>
+      <span style={{color:'#ffffff', fontFamily:'cursive', padding: '0px 10px'}}>Timer: {this.props.ttl}</span>
     );
   }
 };

@@ -1,10 +1,10 @@
 const router = require('express').Router();
-const jwtMW = require("../middlewares/auth.middleware")
+const jwtMW = require('../middlewares/auth.middleware');
 const authService = require('../services/auth.services');
 const UserObject = require('../models/User').UserObject;
 const { body, validationResult } = require('express-validator');
-const jwt = require("jsonwebtoken");
-const tokenTTL = 60000*60;
+const jwt = require('jsonwebtoken');
+const tokenTTL = 60000 * 60;
 
 router.get('/', (req, res) => {
   res.json({ one: 'one' });

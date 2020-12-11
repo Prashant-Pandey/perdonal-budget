@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './HomePage.scss';
-import axios from 'axios';
 
 export default class HomePage extends Component {
 
@@ -9,12 +8,6 @@ export default class HomePage extends Component {
 		this.state = {
 			budgets: []
 		}
-	}
-
-	async componentDidMount() {
-		// const res = (await axios.get("http://localhost:3000/budget")).data.data;
-		// this.setState({ budgets: res });
-		// this.forceUpdate();
 	}
 
 	render() {

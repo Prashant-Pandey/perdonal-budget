@@ -35,5 +35,5 @@ export const actions = {
   updateBudgetType: 'UPDATE_BUDGET_TYPE',
   updateBudgetTypeFailed: 'UPDATE_BUDGET_TYPE_FAILED',
   deleteBudgetType: 'DELETE_BUDGET_TYPE',
-  deleteBudgetTypeFailed: 'DELETE_BUDGET_TYPE_FAILED',
+  deleteBudgetTypeFailed: 'DELETE_BUDGET_TYPE_FAILED'
 }
