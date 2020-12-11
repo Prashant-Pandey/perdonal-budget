@@ -50,18 +50,13 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "@babel/core": "^7.0.0",
-    "@babel/polyfill": "^7.0.0-beta.51",
-    "@babel/preset-env": "^7.12.10",
-    "@babel/preset-react": "^7.12.10",
-    "babel-plugin-transform-scss": "^1.0.9",
-    "babel-core": "^7.0.0-bridge.0",
+    "@babel/plugin-transform-runtime": "^7.12.10",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "identity-obj-proxy": "^3.0.0",
-    "jest": "^24.9.0",
     "react-test-renderer": "^17.0.1",
     "redux-devtools": "^3.7.0",
-    "redux-devtools-extension": "^2.13.8"
+    "redux-devtools-extension": "^2.13.8",
+    "redux-mock-store": "^1.5.4"
   }
 }

@@ -29,7 +29,7 @@ function App(props) {
         <header>
           <Menu />
         </header>
-        <main className="container center" id="main-container" role="main">
+        <main data-test="main-container" className="container center" id="main-container" role="main">
           <Snackbar
             open={props.message !== ''} autoHideDuration={600}>
             <MuiAlert elevation={10}
