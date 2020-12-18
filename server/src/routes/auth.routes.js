@@ -64,6 +64,7 @@ router.post('/login', [
   res.cookie('token', token, {
     maxAge: ttl
   });
+  res.setHeader('access-control-expose-headers', 'Set-Cookie');
   return res.json({ success: true, ttl, token, error: false });
 });
 
@@ -103,6 +104,7 @@ router.post('/signup', [
     httpOnly: true,
     secure: true
   });
+  res.setHeader('access-control-expose-headers', 'Set-Cookie');
   return res.json({ success: true, ttl, token, err: null });
 });
 
