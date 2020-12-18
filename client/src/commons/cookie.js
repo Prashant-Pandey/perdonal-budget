@@ -30,3 +30,8 @@ export function deleteCookie(cookiename) {
     return false;
   }
 }
+
+
+export function setCookie(cookiename, value, ttl){
+  document.cookie = `${cookiename}=${value};expires=${new Date(ttl)}`
+}

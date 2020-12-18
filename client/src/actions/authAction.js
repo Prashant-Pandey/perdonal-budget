@@ -19,7 +19,8 @@ export const login = (loginJSON) => (dispatch) => {
       dispatchError(dispatch, data, actions.loginFail)
       return Promise.reject();
     }
-    const token = getCookie("token")
+    const token = data.token;
+    await setCookie("token", token, data.ttl)
     dispatch({
       type: actions.loginSuccess,
       payload: {
@@ -41,7 +42,8 @@ export const signup = (signupJSON) => (dispatch) => {
       dispatchError(dispatch, data, actions.signupFail)
       return Promise.reject();
     }
-    const token = getCookie("token")
+    const token = data.token;
+    await setCookie("token", token, data.ttl)
     dispatch({
       type: actions.signupSuccess,
       payload: {
@@ -64,7 +66,8 @@ export const refresh = () => (dispatch) => {
       return Promise.reject();
     }
     
-    const token = getCookie("token")
+    const token = data.token;
+    await setCookie("token", token, data.ttl)
     dispatch({
       type: actions.refresh,
       payload: {

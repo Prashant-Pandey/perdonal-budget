@@ -64,7 +64,7 @@ router.post('/login', [
   res.cookie('token', token, {
     maxAge: ttl
   });
-  return res.json({ success: true, ttl, error: false });
+  return res.json({ success: true, ttl, token, error: false });
 });
 
 router.post('/signup', [
@@ -99,18 +99,23 @@ router.post('/signup', [
   // valid response
   const [token, ttl] = generateAndSendToken(authRes);
   res.cookie('token', token, {
-    maxAge: ttl
+    maxAge: ttl,
+    httpOnly: true,
+    secure: true
   });
-  return res.json({ success: true, ttl, err: null });
+  return res.json({ success: true, ttl, token, err: null });
 });
 
 router.post('/refresh', jwtMW, (req, res) => {
   const authToken = req.headers.authorization.split(' ')[1];
   // valid response
   res.cookie('token', authToken, {
-    maxAge: tokenTTL
+    maxAge: tokenTTL,
+    httpOnly: true,
+    secure: true
   });
-  return res.json({ success: true, ttl: tokenTTL, err: null });
+  res.setHeader('access-control-expose-headers', 'Set-Cookie');
+  return res.json({ success: true, ttl: tokenTTL, token: authToken, err: null });
 });
 
 module.exports = router;
