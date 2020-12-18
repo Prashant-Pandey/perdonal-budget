@@ -22,7 +22,7 @@ app.use('/auth', cors({
   origin: [frontEnd, 'http://localhost:3000'],
   preflightContinue: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['Authorization'],
+  exposedHeaders: ['Authorization', 'Set-Cookie'],
   credentials: true
 }), require('./routes/auth.routes'));
 
