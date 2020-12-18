@@ -64,7 +64,6 @@ router.post('/login', [
   res.cookie('token', token, {
     maxAge: ttl,
     httpOnly: true,
-    secure: true,
     sameSite: 'none'
   });
   res.setHeader('access-control-expose-headers', 'Set-Cookie');
@@ -105,7 +104,6 @@ router.post('/signup', [
   res.cookie('token', token, {
     maxAge: ttl,
     httpOnly: true,
-    secure: true,
     sameSite: 'none'
   });
   res.setHeader('access-control-expose-headers', 'Set-Cookie');
@@ -118,7 +116,6 @@ router.post('/refresh', jwtMW, (req, res) => {
   res.cookie('token', authToken, {
     maxAge: tokenTTL,
     httpOnly: true,
-    secure: true,
     sameSite: 'none'
   });
   res.setHeader('access-control-expose-headers', 'Set-Cookie');
