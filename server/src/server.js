@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 // professor's solution error would come if he'd log in using second user
 
 app.use('/auth', cors({
-  origin: ['http://localhost:3001'],
+  origin: ['http://localhost:3001', 'http://localhost:3000'],
   preflightContinue: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
   exposedHeaders: ['Authorization'],

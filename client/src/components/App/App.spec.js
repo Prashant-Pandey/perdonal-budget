@@ -31,10 +31,4 @@ describe('App component', () => {
     console.log(wrapper.debug());
     expect(wrapper.length).toBe(0);
   });
-})
-
-// it("renders Account header", () => {
-//   const wrapper = shallow(<App />);
-//   const welcome = <h1>Display Active Users Account Details</h1>;
-//   expect(wrapper.contains(welcome)).toEqual(true);
-// });
+});

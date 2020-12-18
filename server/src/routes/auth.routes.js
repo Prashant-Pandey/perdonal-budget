@@ -74,6 +74,7 @@ router.post('/signup', [
   body('phone').isString().optional({ nullable: true })
 
 ], async (req, res) => {
+  console.log(req.body);
   const errors = validationResult(req);
   // if inputs are not sanitized
   if (!errors.isEmpty()) {
