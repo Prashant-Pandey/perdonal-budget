@@ -4,8 +4,7 @@ const mongoose = require('mongoose');
 
 const iBudgetType = new mongoose.Schema({
   name: {
-    type: String,
-    unique: true
+    type: String
   },
   goal: {
     type: Number
