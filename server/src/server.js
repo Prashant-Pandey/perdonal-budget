@@ -6,6 +6,7 @@ require('dotenv').config();
 const jwtMW = require('./middlewares/auth.middleware');
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: true });
+const clientUrl = process.env.CLIENT_URL || 'http://localhost:3002';
 
 const port = 3000;
 
@@ -15,13 +16,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.get('/', (req, res) => {
-  res.redirect('http://localhost:3001');
+  res.redirect(clientUrl);
 });
 
 // professor's solution error would come if he'd log in using second user
 
 app.use('/auth', cors({
-  origin: ['http://localhost:3001', 'http://localhost:3000'],
+  origin: [clientUrl, 'http://localhost:3001'],
   preflightContinue: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
   exposedHeaders: ['Authorization'],
@@ -52,6 +53,6 @@ app.use(function (err, req, res, next) {
   }
 });
 
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log(`Yay! app started at ${port}`);
 });

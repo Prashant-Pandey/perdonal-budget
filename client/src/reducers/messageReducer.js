@@ -17,12 +17,13 @@ export default function (state = initialState, action) {
         type = 'error';
         message = `Server Response ${payload.status}: `+ message
       }
+
       const newState = {
         message
       };
       newState[type] = message;
+      console.log(message, payload, newState);
       return newState;
-
     case actions.clearMessage:
       return { message: '' };
 
