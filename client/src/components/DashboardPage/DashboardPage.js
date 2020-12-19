@@ -40,7 +40,7 @@ function DashboardPage(props) {
 
 	useEffect(() => {
 		let interval;
-		if (props.ttl > 0 ) {
+		if (props.ttl > 0) {
 			interval = setInterval(() => {
 
 				if (props.ttl <= 0) {
@@ -50,12 +50,12 @@ function DashboardPage(props) {
 
 				props.dispatch({ type: actions.decreaseTTL })
 			}, 1000)
-		}else{
-			if(!refreshedOnce){
+		} else {
+			if (!refreshedOnce) {
 				props.dispatch(refresh());
 				refreshedOnce = true;
 			}
-			
+
 		}
 
 		return () => {
@@ -68,7 +68,9 @@ function DashboardPage(props) {
 	return (
 		<div className="DashboardPage">
 			<h1>Dashboard</h1>
-			<div className="monthly-stats">
+			<div className="monthly-stats" style={
+				props.budgetTypes.length < 5 ? { flexDirection: 'row', alignItems: 'center' } : { flexDirection: 'column', alignItems: 'stretch'  }
+			}>
 				<GoalSpendingChart />
 				<MonthlySpendingChart />
 			</div>
@@ -82,6 +84,7 @@ function DashboardPage(props) {
 const mapStateToProps = (state) => {
 	return {
 		budgetData: state.budget.budgetData,
+		budgetTypes: state.types.budgetTypes,
 		ttl: state.auth.ttl
 	}
 }

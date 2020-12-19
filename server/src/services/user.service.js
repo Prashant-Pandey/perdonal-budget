@@ -12,8 +12,7 @@ async function createUser(userObject) {
     const user = await User.create(userObject);
     return user;
   } catch (error) {
-    console.log(error);
-    return errorHandler.internalServerError('Internal server error');
+    return errorHandler.internalServerError(error.message);
   }
 }
 
@@ -22,7 +21,7 @@ async function findUserByEmail(email) {
     const user = await User.findOne({ email });
     return user;
   } catch (error) {
-    return errorHandler.internalServerError('Internal server error');
+    return errorHandler.internalServerError(error.message);
   }
 }
 

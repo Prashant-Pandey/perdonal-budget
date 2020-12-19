@@ -6,8 +6,9 @@ require('dotenv').config();
 const jwtMW = require('./middlewares/auth.middleware');
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: true });
-const frontEnd = process.env.CLIENT;
-const port = 3001;
+const clientUrl = process.env.CLIENT_URL || 'http://localhost:3002';
+
+const port = 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,11 +16,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.get('/', (req, res) => {
-  res.redirect(frontEnd);
+  res.redirect(clientUrl);
 });
 
 app.use('/auth', cors({
-  origin: [frontEnd, 'http://localhost:5000'],
+  origin: [clientUrl, 'http://localhost:3001'],
   preflightContinue: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
   exposedHeaders: ['Authorization', 'Set-Cookie'],

@@ -30,8 +30,7 @@ export const login = (loginJSON) => (dispatch) => {
     });
 
     return Promise.resolve();
-  }).catch((error = { message: 'Check internet', error: true }) => {
-    dispatchError(dispatch, error, actions.loginFail)
+  }).catch((error) => {
     return Promise.reject();
   })
 }
@@ -53,8 +52,7 @@ export const signup = (signupJSON) => (dispatch) => {
     });
 
     return Promise.resolve();
-  }).catch((err = { message: 'Check internet', error: true }) => {
-    dispatchError(dispatch, err, actions.signupFail)
+  }).catch((err) => {
     return Promise.reject();
   })
 }
@@ -65,9 +63,7 @@ export const refresh = () => (dispatch) => {
       dispatchError(dispatch, data, actions.refreshFail)
       return Promise.reject();
     }
-    
-    const token = data.token;
-    setCookie("token", token, data.ttl)
+    const token = getCookie("token")
     dispatch({
       type: actions.refresh,
       payload: {
@@ -75,8 +71,7 @@ export const refresh = () => (dispatch) => {
         ttl: data.ttl
       }
     });
-  }).catch((err = { message: 'Check internet', error: true }) => {
-    dispatchError(dispatch, err, actions.refreshFail)
+  }).catch((err) => {
     return Promise.reject();
   })
 }
@@ -88,8 +83,7 @@ export const logout = () => (dispatch) => {
     });
 
     return Promise.resolve();
-  }).catch((err= { message: 'Check internet', error: true }) => {
-    dispatchError(dispatch, err, actions.refreshFail)
+  }).catch((err) => {
     return Promise.reject();
   })
 }
