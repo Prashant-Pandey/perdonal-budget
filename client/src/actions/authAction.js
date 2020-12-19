@@ -1,4 +1,4 @@
-import { setCookie } from '../commons/cookie';
+import { getCookie } from '../commons/cookie';
 import { AuthService } from '../services/AuthService';
 import { actions } from './index';
 
@@ -19,8 +19,7 @@ export const login = (loginJSON) => (dispatch) => {
       dispatchError(dispatch, data, actions.loginFail)
       return Promise.reject();
     }
-    const token = data.token;
-    setCookie("token", token, data.ttl)
+    const token = getCookie("token")
     dispatch({
       type: actions.loginSuccess,
       payload: {
@@ -41,8 +40,7 @@ export const signup = (signupJSON) => (dispatch) => {
       dispatchError(dispatch, data, actions.signupFail)
       return Promise.reject();
     }
-    const token = data.token;
-    setCookie("token", token, data.ttl)
+    const token = data.getCookie("token")
     dispatch({
       type: actions.signupSuccess,
       payload: {

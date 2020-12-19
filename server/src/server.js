@@ -6,9 +6,9 @@ require('dotenv').config();
 const jwtMW = require('./middlewares/auth.middleware');
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: true });
-const clientUrl = process.env.CLIENT_URL || 'http://localhost:3002';
+const clientUrl = process.env.CLIENT_URL || 'http://34.72.53.19:3000';
 
-const port = 3000;
+const port = 3001;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -27,7 +27,7 @@ app.use('/auth', cors({
   credentials: true
 }), require('./routes/auth.routes'));
 
-app.use(cors({ origin: frontEnd }));
+app.use(cors({ origin: clientUrl }));
 
 app.use('/budget', jwtMW, require('./routes/budget.routes'));
 

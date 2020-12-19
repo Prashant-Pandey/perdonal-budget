@@ -50,7 +50,6 @@ class SignupPage extends Component {
 		this.props.dispatch(register(signupData)).then(() => {
 			this.setState({ loginSuccess: true });
 		}).catch(() => {
-			this.setLoginError(true);
 			this.setState({ ...this.state, showError: true });
 		});
 
