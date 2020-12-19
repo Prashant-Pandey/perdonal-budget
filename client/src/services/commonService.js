@@ -1,5 +1,5 @@
 const { default: axios } = require("axios");
-const endpoint = process.env.BACKEND || "http://35.184.178.64:3000/";
+const endpoint = "http://localhost:3001/";
 const connectAPI = async ({ method, service, headers = {}, params, body, withCredentials=false  }) => {
   try {
     headers["Content-Type"] = "application/json";
@@ -9,7 +9,7 @@ const connectAPI = async ({ method, service, headers = {}, params, body, withCre
       params,
       data: body,
       headers,
-      withCredentials
+      // withCredentials
     });
     return response.data;
   } catch (error) {

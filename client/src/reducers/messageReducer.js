@@ -12,10 +12,11 @@ export default function (state = initialState, action) {
   switch (type) {
     case actions.setMessage:
       let type = 'success';
-      let message = payload.message
+      let message = payload.message;
+      console.log(message, payload);
       if (payload.error) {
         type = 'error';
-        message = `Server Response ${payload.status}: `+ message
+        message = `Server Response ${payload.status||400}: `+ message
       }
       const newState = {
         message

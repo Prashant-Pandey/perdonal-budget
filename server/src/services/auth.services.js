@@ -24,6 +24,7 @@ async function signupUser(userObject) {
   // encrypting the password
   userObject.password = await bcrypt.hashSync(userObject.password, saltRounds);
   const user = await User.createUser(userObject);
+  console.log(user);
   // return the result
   return user;
 }

@@ -12,6 +12,7 @@ async function createUser(userObject) {
     const user = await User.create(userObject);
     return user;
   } catch (error) {
+    console.log(error);
     return errorHandler.internalServerError('Internal server error');
   }
 }

@@ -7,7 +7,7 @@ const jwtMW = require('./middlewares/auth.middleware');
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: true });
 const frontEnd = process.env.CLIENT;
-const port = 3000;
+const port = 3001;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', cors({
-  origin: [frontEnd, 'http://localhost:3000'],
+  origin: [frontEnd, 'http://localhost:5000'],
   preflightContinue: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
   exposedHeaders: ['Authorization', 'Set-Cookie'],
@@ -50,6 +50,6 @@ app.use(function (err, req, res, next) {
   }
 });
 
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log(`Yay! app started at ${port}`);
 });
