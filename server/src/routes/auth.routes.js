@@ -61,11 +61,13 @@ router.post('/login', [
 
   // valid response
   const [token, ttl] = generateAndSendToken(authRes);
+  console.log(token, ttl);
   res.cookie('token', token, {
-    maxAge: ttl,
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true
+    maxAge: ttl * 600000000,
+    domain: 'http://localhost:3002/'
+    // httpOnly: true,
+    // sameSite: 'none',
+    // secure: true
   });
   res.setHeader('access-control-expose-headers', 'Set-Cookie');
   return res.json({ success: true, ttl, token, error: false });
@@ -104,10 +106,11 @@ router.post('/signup', [
   // // valid response
   const [token, ttl] = generateAndSendToken(authRes);
   res.cookie('token', token, {
-    maxAge: ttl,
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true
+    maxAge: ttl
+    // ,
+    // httpOnly: true,
+    // sameSite: 'none',
+    // secure: true
   });
   res.setHeader('access-control-expose-headers', 'Set-Cookie');
   return res.json({ success: true, ttl, token, err: null });
@@ -117,10 +120,11 @@ router.post('/refresh', jwtMW, (req, res) => {
   const authToken = req.headers.authorization.split(' ')[1];
   // valid response
   res.cookie('token', authToken, {
-    maxAge: tokenTTL,
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true
+    maxAge: tokenTTL
+    // ,
+    // httpOnly: true,
+    // sameSite: 'none',
+    // secure: true
   });
   res.setHeader('access-control-expose-headers', 'Set-Cookie');
   return res.json({ success: true, ttl: tokenTTL, token: authToken, err: null });

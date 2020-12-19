@@ -3,6 +3,7 @@ import { AuthService } from '../services/AuthService';
 import { actions } from './index';
 
 const dispatchError = (dispatch, errObj, action) => {
+  console.log('dispatchError: ', errObj);
   dispatch({
     type: action
   });
@@ -15,21 +16,23 @@ const dispatchError = (dispatch, errObj, action) => {
 
 export const login = (loginJSON) => (dispatch) => {
   return new AuthService().login(loginJSON).then((data) => {
-    if (data.error) {
-      dispatchError(dispatch, data, actions.loginFail)
-      return Promise.reject();
+    if (data.success) {
+      const token = data.token;
+      setCookie("token", token, data.ttl)
+      dispatch({
+        type: actions.loginSuccess,
+        payload: {
+          token,
+          ttl: data.ttl
+        }
+      }); 
+      return Promise.resolve();
     }
-    const token = data.token;
-    setCookie("token", token, data.ttl)
-    dispatch({
-      type: actions.loginSuccess,
-      payload: {
-        token,
-        ttl: data.ttl
-      }
-    });
+    
+    dispatchError(dispatch, data, actions.loginFail)
+    return Promise.reject();
 
-    return Promise.resolve();
+   
   }).catch((error = { message: 'Check internet', error: true }) => {
     dispatchError(dispatch, error, actions.loginFail)
     return Promise.reject();
@@ -65,7 +68,7 @@ export const refresh = () => (dispatch) => {
       dispatchError(dispatch, data, actions.refreshFail)
       return Promise.reject();
     }
-    
+
     const token = data.token;
     setCookie("token", token, data.ttl)
     dispatch({
@@ -88,7 +91,7 @@ export const logout = () => (dispatch) => {
     });
 
     return Promise.resolve();
-  }).catch((err= { message: 'Check internet', error: true }) => {
+  }).catch((err = { message: 'Check internet', error: true }) => {
     dispatchError(dispatch, err, actions.refreshFail)
     return Promise.reject();
   })
