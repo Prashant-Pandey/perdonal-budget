@@ -9,18 +9,16 @@ const connectAPI = async ({ method, service, headers = {}, params, body, withCre
       params,
       data: body,
       headers,
-      // withCredentials
+      withCredentials
     });
     return response.data;
   } catch (error) {
-    console.log('error::: ', error);
     const errorBody = {
       error: true,
       status: 400,
       message: error.message
     }
     if (error.response) {
-      console.log(error.response, ' ;;;;;; response');
       errorBody.status = error.response.status;
       errorBody.message = error.response.data.message;
     } else if (error.request) {

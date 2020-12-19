@@ -3,6 +3,7 @@ import { AuthService } from '../services/AuthService';
 import { actions } from './index';
 
 const dispatchError = (dispatch, errObj, action) => {
+  console.log('dispatchError: ', errObj);
   dispatch({
     type: action
   });
@@ -15,10 +16,19 @@ const dispatchError = (dispatch, errObj, action) => {
 
 export const login = (loginJSON) => (dispatch) => {
   return new AuthService().login(loginJSON).then((data) => {
-    if (data.error) {
-      dispatchError(dispatch, data, actions.loginFail)
-      return Promise.reject();
+    if (data.success) {
+      const token = data.token;
+      setCookie("token", token, data.ttl)
+      dispatch({
+        type: actions.loginSuccess,
+        payload: {
+          token,
+          ttl: data.ttl
+        }
+      }); 
+      return Promise.resolve();
     }
+
     const token = data.token;
     setCookie("token", token, data.ttl*10000);
     dispatch({
@@ -63,6 +73,7 @@ export const refresh = () => (dispatch) => {
       dispatchError(dispatch, data, actions.refreshFail)
       return Promise.reject();
     }
+
     const token = data.token;
     setCookie("token", token, data.ttl*10000);
     dispatch({

@@ -23,7 +23,7 @@ app.use('/auth', cors({
   origin: [clientUrl, 'http://34.72.53.19:3000'],
   preflightContinue: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['Authorization', 'Set-Cookie'],
+  exposedHeaders: ['Authorization'],
   credentials: true
 }), require('./routes/auth.routes'));
 
