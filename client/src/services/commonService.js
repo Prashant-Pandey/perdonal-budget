@@ -1,5 +1,5 @@
 const { default: axios } = require("axios");
-const endpoint = "http://34.72.53.19:3001/";
+const endpoint = "http://localhost:3001/";
 const connectAPI = async ({ method, service, headers = {}, params, body, withCredentials=false  }) => {
   try {
     headers["Content-Type"] = "application/json";

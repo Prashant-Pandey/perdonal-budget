@@ -33,5 +33,7 @@ export function deleteCookie(cookiename) {
 
 
 export function setCookie(cookiename, value, ttl){
-  document.cookie = `${cookiename}=${value};expires=${new Date(ttl)}`
+  console.log('input to set cookie: ', cookiename, value, ttl);
+  document.cookie = `${cookiename}=${value};expires=${new Date(Date.now()+ ttl)}`
+  console.log('result: ', document.cookie);
 }
