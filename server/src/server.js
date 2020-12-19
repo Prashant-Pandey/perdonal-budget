@@ -19,17 +19,15 @@ app.get('/', (req, res) => {
   res.redirect(clientUrl);
 });
 
-// professor's solution error would come if he'd log in using second user
-
 app.use('/auth', cors({
   origin: [clientUrl, 'http://localhost:3001'],
   preflightContinue: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['Authorization'],
+  exposedHeaders: ['Authorization', 'Set-Cookie'],
   credentials: true
 }), require('./routes/auth.routes'));
 
-app.use(cors({ origin: 'http://localhost:3001' }));
+app.use(cors({ origin: frontEnd }));
 
 app.use('/budget', jwtMW, require('./routes/budget.routes'));
 

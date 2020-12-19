@@ -62,9 +62,13 @@ router.post('/login', [
   // valid response
   const [token, ttl] = generateAndSendToken(authRes);
   res.cookie('token', token, {
-    maxAge: ttl
+    maxAge: ttl,
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true
   });
-  return res.json({ success: true, ttl, error: false });
+  res.setHeader('access-control-expose-headers', 'Set-Cookie');
+  return res.json({ success: true, ttl, token, error: false });
 });
 
 router.post('/signup', [
@@ -88,6 +92,7 @@ router.post('/signup', [
   const userObj = UserObject(req.body);
   const authRes = await authService.signupUser(userObj);
   // if user is not valid
+  console.log(authRes);
   if (authRes.err) {
     return res.status(authRes.err.status).send({
       success: false,
@@ -96,21 +101,29 @@ router.post('/signup', [
     });
   }
 
-  // valid response
+  // // valid response
   const [token, ttl] = generateAndSendToken(authRes);
   res.cookie('token', token, {
-    maxAge: ttl
+    maxAge: ttl,
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true
   });
-  return res.json({ success: true, ttl, err: null });
+  res.setHeader('access-control-expose-headers', 'Set-Cookie');
+  return res.json({ success: true, ttl, token, err: null });
 });
 
 router.post('/refresh', jwtMW, (req, res) => {
   const authToken = req.headers.authorization.split(' ')[1];
   // valid response
   res.cookie('token', authToken, {
-    maxAge: tokenTTL
+    maxAge: tokenTTL,
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true
   });
-  return res.json({ success: true, ttl: tokenTTL, err: null });
+  res.setHeader('access-control-expose-headers', 'Set-Cookie');
+  return res.json({ success: true, ttl: tokenTTL, token: authToken, err: null });
 });
 
 module.exports = router;
