@@ -1,5 +1,5 @@
 const { default: axios } = require("axios");
-const endpoint = "http://34.72.53.19:3001/";
+const endpoint = "http://localhost:3001/";
 const connectAPI = async ({ method, service, headers = {}, params, body, withCredentials=false  }) => {
   try {
     headers["Content-Type"] = "application/json";
@@ -9,18 +9,16 @@ const connectAPI = async ({ method, service, headers = {}, params, body, withCre
       params,
       data: body,
       headers,
-      // withCredentials
+      withCredentials
     });
     return response.data;
   } catch (error) {
-    console.log('error::: ', error);
     const errorBody = {
       error: true,
       status: 400,
       message: error.message
     }
     if (error.response) {
-      console.log(error.response, ' ;;;;;; response');
       errorBody.status = error.response.status;
       errorBody.message = error.response.data.message;
     } else if (error.request) {

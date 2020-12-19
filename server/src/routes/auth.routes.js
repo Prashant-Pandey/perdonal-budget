@@ -4,7 +4,7 @@ const authService = require('../services/auth.services');
 const UserObject = require('../models/User').UserObject;
 const { body, validationResult } = require('express-validator');
 const jwt = require('jsonwebtoken');
-const tokenTTL = 60000 * 60;
+const tokenTTL = 120000;
 
 router.get('/', (req, res) => {
   res.json({ one: 'one' });
@@ -12,16 +12,15 @@ router.get('/', (req, res) => {
 
 function generateAndSendToken(authRes) {
   // generating cookie for saving token
-  const ttl = tokenTTL;
   const tokenObj = {
     id: authRes._id,
     email: authRes.email,
     password: authRes.passowrd
   };
   const token = jwt.sign(tokenObj, process.env.AUTH_SECRET, {
-    expiresIn: ttl
+    expiresIn: tokenTTL
   });
-  return [token, ttl];
+  return token;
 }
 
 function generateErrorMessage(errArray) {
@@ -60,15 +59,12 @@ router.post('/login', [
   }
 
   // valid response
-  const [token, ttl] = generateAndSendToken(authRes);
+  const token = generateAndSendToken(authRes);
   res.cookie('token', token, {
-    maxAge: ttl,
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true
+    expires: new Date(Date.now() + tokenTTL),
+    maxAge: tokenTTL
   });
-  res.setHeader('access-control-expose-headers', 'Set-Cookie');
-  return res.json({ success: true, ttl, token, error: false });
+  return res.json({ success: true, ttl: tokenTTL, token, error: false });
 });
 
 router.post('/signup', [
@@ -102,27 +98,21 @@ router.post('/signup', [
   }
 
   // // valid response
-  const [token, ttl] = generateAndSendToken(authRes);
+  const token = generateAndSendToken(authRes);
   res.cookie('token', token, {
-    maxAge: ttl,
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true
+    expires: new Date(Date.now() + tokenTTL),
+    maxAge: tokenTTL
   });
-  res.setHeader('access-control-expose-headers', 'Set-Cookie');
-  return res.json({ success: true, ttl, token, err: null });
+  return res.json({ success: true, ttl: tokenTTL, token, err: null });
 });
 
 router.post('/refresh', jwtMW, (req, res) => {
   const authToken = req.headers.authorization.split(' ')[1];
   // valid response
   res.cookie('token', authToken, {
-    maxAge: tokenTTL,
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true
+    expires: new Date(Date.now() + tokenTTL),
+    maxAge: tokenTTL
   });
-  res.setHeader('access-control-expose-headers', 'Set-Cookie');
   return res.json({ success: true, ttl: tokenTTL, token: authToken, err: null });
 });
 

@@ -13,6 +13,12 @@ const authReducer = (state = initState, action) => {
 
    switch (type) {
       case actions.signupSuccess:
+         if (!payload.token||payload.token===false) {
+            return {
+               ...state,
+               isLoggedIn: false
+            }
+         }
          return {
             ...state,
             isLoggedIn: true,

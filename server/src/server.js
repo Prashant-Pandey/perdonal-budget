@@ -6,7 +6,7 @@ require('dotenv').config();
 const jwtMW = require('./middlewares/auth.middleware');
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGO_DB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: true });
-const clientUrl = process.env.CLIENT_URL || 'http://34.72.53.19:3000';
+const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
 
 const port = 3001;
 
@@ -20,14 +20,14 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', cors({
-  origin: [clientUrl, 'http://localhost:3001'],
+  origin: [clientUrl, 'http://34.72.53.19:3000'],
   preflightContinue: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
-  exposedHeaders: ['Authorization', 'Set-Cookie'],
+  exposedHeaders: ['Authorization'],
   credentials: true
 }), require('./routes/auth.routes'));
 
-app.use(cors({ origin: clientUrl }));
+app.use(cors({ origin: [clientUrl, 'http://34.72.53.19:3000'] }));
 
 app.use('/budget', jwtMW, require('./routes/budget.routes'));
 

@@ -1,8 +1,9 @@
-import { getCookie } from '../commons/cookie';
+import { setCookie } from '../commons/cookie';
 import { AuthService } from '../services/AuthService';
 import { actions } from './index';
 
 const dispatchError = (dispatch, errObj, action) => {
+  console.log('dispatchError: ', errObj);
   dispatch({
     type: action
   });
@@ -15,11 +16,21 @@ const dispatchError = (dispatch, errObj, action) => {
 
 export const login = (loginJSON) => (dispatch) => {
   return new AuthService().login(loginJSON).then((data) => {
-    if (data.error) {
-      dispatchError(dispatch, data, actions.loginFail)
-      return Promise.reject();
+    if (data.success) {
+      const token = data.token;
+      setCookie("token", token, data.ttl)
+      dispatch({
+        type: actions.loginSuccess,
+        payload: {
+          token,
+          ttl: data.ttl
+        }
+      }); 
+      return Promise.resolve();
     }
-    const token = getCookie("token")
+
+    const token = data.token;
+    setCookie("token", token, data.ttl*10000);
     dispatch({
       type: actions.loginSuccess,
       payload: {
@@ -40,7 +51,8 @@ export const signup = (signupJSON) => (dispatch) => {
       dispatchError(dispatch, data, actions.signupFail)
       return Promise.reject();
     }
-    const token = data.getCookie("token")
+    const token = data.token;
+    setCookie("token", token, data.ttl*100);
     dispatch({
       type: actions.signupSuccess,
       payload: {
@@ -61,7 +73,9 @@ export const refresh = () => (dispatch) => {
       dispatchError(dispatch, data, actions.refreshFail)
       return Promise.reject();
     }
-    const token = getCookie("token")
+
+    const token = data.token;
+    setCookie("token", token, data.ttl*10000);
     dispatch({
       type: actions.refresh,
       payload: {
